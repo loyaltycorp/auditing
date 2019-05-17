@@ -23,15 +23,17 @@ final class Connection implements ConnectionInterface
      * @param string $region AWS region
      * @param string|null $endpoint Endpoint url
      * @param string|null $version Version
+     * @param \Closure|null $handler Custom handler
      */
     public function __construct(
         string $key,
         string $secret,
         string $region,
         ?string $endpoint = null,
-        ?string $version = null
+        ?string $version = null,
+        ?\Closure $handler = null
     ) {
-        $this->dbClient = new DynamoDbClient([
+        $this->dbClient = new DynamoDbClient(\array_merge([
             'credentials' => [
                 'key' => $key,
                 'secret' => $secret
@@ -39,7 +41,7 @@ final class Connection implements ConnectionInterface
             'endpoint' => $endpoint,
             'region' => $region,
             'version' => $version ?? 'latest'
-        ]);
+        ], $handler !== null ? ['handler' => $handler] : []));
     }
 
     /**

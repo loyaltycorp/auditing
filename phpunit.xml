@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="tests/bootstrap.php"
          verbose="true">
     <testsuites>
         <testsuite name="External Test Suite">
@@ -15,15 +14,10 @@
         </whitelist>
     </filter>
     <php>
-        <env name="ENV_TEST1" value="testing"/>
-        <env name="ENV_TEST2" value='"testing"'/>
-        <env name="ENV_EMPTY1" value='"empty"'/>
-        <env name="ENV_EMPTY2" value="(empty)"/>
-        <env name="ENV_FALSE1" value='"false"'/>
-        <env name="ENV_FALSE2" value="(false)"/>
-        <env name="ENV_NULL1" value='"null"'/>
-        <env name="ENV_NULL2" value="(null)"/>
-        <env name="ENV_TRUE1" value='"true"'/>
-        <env name="ENV_TRUE2" value="(true)"/>
+        <env name="AWS_DYNAMODB_ACCESS_KEY_ID" value="key"/>
+        <env name="AWS_DYNAMODB_ENDPOINT" value="http://localhost:8000"/>
+        <env name="AWS_DYNAMODB_REGION" value="ap-southeast-2"/>
+        <env name="AWS_DYNAMODB_SECRET_ACCESS_KEY" value="secret"/>
+        <env name="AWS_DYNAMODB_VERSION" value="latest"/>
     </php>
 </phpunit>

@@ -13,6 +13,7 @@
   "require-dev": {
     "eoneopay/standards": "dev-master",
     "illuminate/console": "^5.5",
+    "laravel/lumen-framework": "^5.5",
     "phpstan/phpstan": "^0.11.6",
     "phpstan/phpstan-phpunit": "^0.11.1",
     "phpstan/phpstan-strict-rules": "^0.11.0",
@@ -20,6 +21,17 @@
     "roave/security-advisories": "dev-master",
     "sebastian/phpcpd": "^4.1",
     "squizlabs/php_codesniffer": "^3.4"
+  },
+  "suggest": {
+    "laravel/framework": "^5.5",
+    "laravel/lumen-framework": "^5.5",
+    "phpmd/phpmd": "Check coding best practices",
+    "phpstan/phpstan": "Static analysis of code to detect potential errors",
+    "phpunit/phpunit": "Run unit tests",
+    "sebastian/phpcpd": "Detect code duplication",
+    "sensiolabs/security-checker": "Check project's dependencies for known vulnerabilities",
+    "squizlabs/php_codesniffer": "Check code style",
+    "vlucas/phpdotenv": "When using the lumen bridge, phpdotenv is required"
   },
   "autoload": {
     "psr-4": {
