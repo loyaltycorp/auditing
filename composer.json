@@ -5,9 +5,10 @@
   "license": "BSD-3-Clause",
   "minimum-stability": "stable",
   "require": {
+    "php": ">=7.1",
     "aws/aws-sdk-php": "^3.93",
-    "guzzlehttp/guzzle": "^6.3",
-    "php": ">=7.1"
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "^6.3"
   },
   "require-dev": {
     "eoneopay/standards": "dev-master",
