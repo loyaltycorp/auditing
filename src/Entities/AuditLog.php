@@ -21,8 +21,8 @@ final class AuditLog extends Entity
     protected function getAttributeDefinition(): array
     {
         return [
-            ['AttributeName' => 'occurredAt', 'AttributeType' => 'S'],
-            ['AttributeName' => 'requestId', 'AttributeType' => 'S']
+            ['AttributeName' => 'occurredAt', 'AttributeType' => self::DATA_TYPE_STRING],
+            ['AttributeName' => 'requestId', 'AttributeType' => self::DATA_TYPE_STRING]
         ];
     }
 
@@ -32,8 +32,8 @@ final class AuditLog extends Entity
     protected function getKeySchema(): array
     {
         return [
-            ['AttributeName' => 'occurredAt', 'KeyType' => 'HASH'],
-            ['AttributeName' => 'requestId', 'KeyType' => 'RANGE']
+            ['AttributeName' => 'occurredAt', 'KeyType' => self::KEY_TYPE_HASH],
+            ['AttributeName' => 'requestId', 'KeyType' => self::KEY_TYPE_RANGE]
         ];
     }
 }

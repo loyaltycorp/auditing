@@ -6,6 +6,55 @@ namespace LoyaltyCorp\Auditing\Interfaces;
 interface DynamoDbAwareInterface
 {
     /**
+     * Binary data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_BINARY= 'B';
+
+    /**
+     * Binary set data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_BINARY_SET = 'BS';
+
+    /**
+     * Boolean data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_BOOL = 'BOOL';
+
+    /**
+     * Number data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_NUMBER = 'N';
+
+    /**
+     * Number set data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_NUMBER_SET = 'NS';
+
+    /**
+     * String data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_STRING = 'S';
+
+    /**
+     * String set data type
+     *
+     * @const string
+     */
+    public const DATA_TYPE_STRING_SET = 'SS';
+
+    /**
      * Default throughput read capacity
      *
      * @const int
@@ -25,6 +74,20 @@ interface DynamoDbAwareInterface
      * @const string
      */
     public const KEY_SCHEMA_KEY = 'KeySchema';
+
+    /**
+     * The key type hash.
+     *
+     * @const string
+     */
+    public const KEY_TYPE_HASH = 'HASH';
+
+    /**
+     * The key type range.
+     *
+     * @const string
+     */
+    public const KEY_TYPE_RANGE = 'RANGE';
 
     /**
      * The table item key.
