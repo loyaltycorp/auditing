@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Auditing\Log;
+namespace LoyaltyCorp\Auditing\DataTransferObjects;
 
 use DateTime;
+use LoyaltyCorp\Auditing\DataTransferObject;
 
-class LogLineDto
+class LogLine extends DataTransferObject
 {
     /**
      * @var string
@@ -103,5 +104,27 @@ class LogLineDto
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTableName(): string
+    {
+        return 'LogLine';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        return [
+            'clientIp' => $this->clientIp,
+            'occurredAt' => $this->occurredAt,
+            'requestData' => $this->requestData,
+            'responseData' => $this->responseData,
+            'status' => $this->status
+        ];
     }
 }
