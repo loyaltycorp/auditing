@@ -9,26 +9,36 @@ use LoyaltyCorp\Auditing\DataTransferObject;
 class LogLine extends DataTransferObject
 {
     /**
+     * Client ip
+     *
      * @var string
      */
     private $clientIp;
 
     /**
+     * Occurred timestamp
+     *
      * @var \DateTime
      */
     private $occurredAt;
 
     /**
+     * Request data
+     *
      * @var array|mixed[]
      */
     private $requestData;
 
     /**
+     * Response data
+     *
      * @var array|mixed[]
      */
     private $responseData;
 
     /**
+     * Status
+     *
      * @var int
      */
     private $status;
