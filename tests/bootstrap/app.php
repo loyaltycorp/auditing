@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$basePath = realpath(dirname(__DIR__));
+$basePath = \realpath(\dirname(__DIR__));
 require_once $basePath . '/../vendor/autoload.php';
 
 use EoneoPay\Externals\Environment\Exceptions\InvalidPathException;
@@ -12,7 +12,7 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Providers\LoyaltyCorpAuditingProvider;
 
 // Load env.php or .env if it exists
 try {
-    (new Loader($basePath))->load();
+    (new Loader($basePath ?: ''))->load();
 } catch (InvalidPathException $exception) {
     // Log and continue as per normal since env may not be needed
     (new Logger())->exception($exception);
@@ -29,7 +29,7 @@ try {
 |
 */
 
-$app = new Application($basePath);
+$app = new Application($basePath ?: '');
 
 /*
 |--------------------------------------------------------------------------

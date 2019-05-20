@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing;
 
-use Aws\CommandInterface;
 use Aws\Result;
 use GuzzleHttp\Promise;
 use Illuminate\Console\Command;
@@ -11,7 +10,6 @@ use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use PHPUnit\Framework\TestCase as BaseTestCae;
-use Psr\Http\Message\RequestInterface;
 use ReflectionClass;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -57,7 +55,7 @@ class TestCase extends BaseTestCae
         $instance = new $commandClass();
 
         // Set input/output property values
-        $outputProperty->setValue($instance , $output);
+        $outputProperty->setValue($instance, $output);
 
         return $instance;
     }
@@ -92,7 +90,7 @@ class TestCase extends BaseTestCae
      */
     protected function getMockHandler(?array $result = null): \Closure
     {
-        $myHandler = function (CommandInterface $cmd, RequestInterface $request) use ($result) {
+        $myHandler = function () use ($result) {
             $result = new Result($result ?? []);
             return Promise\promise_for($result);
         };

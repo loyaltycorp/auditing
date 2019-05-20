@@ -11,6 +11,11 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
  */
 class EntityTest extends TestCase
 {
+    /**
+     * Test entity successfully.
+     *
+     * @return void
+     */
     public function testEntity(): void
     {
         $entity = new EntityStub();

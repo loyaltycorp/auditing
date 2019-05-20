@@ -11,6 +11,11 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
  */
 class AuditLogTest extends TestCase
 {
+    /**
+     * Test audit log entity returns expected schema array
+     *
+     * @return void
+     */
     public function testEntity(): void
     {
         $entity = new AuditLog();

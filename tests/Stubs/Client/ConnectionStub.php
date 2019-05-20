@@ -13,6 +13,6 @@ class ConnectionStub implements ConnectionInterface
      */
     public function getDbClient(): DynamoDbClient
     {
-        return new AwsClientInterface();
+        return new DynamoDbClient([]);
     }
 }

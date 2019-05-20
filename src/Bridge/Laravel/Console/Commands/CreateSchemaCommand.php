@@ -1,4 +1,4 @@
-<?php 
+<?php
 declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
@@ -22,6 +22,8 @@ final class CreateSchemaCommand extends Command
 
     /**
      * Handle creation of auditing schema in DynamoDB.
+     *
+     * @return void
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface $schema
      */

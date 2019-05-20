@@ -23,6 +23,8 @@ final class DropSchemaCommand extends Command
     /**
      * Handle creation of auditing schema in DynamoDB.
      *
+     * @return void
+     *
      * @param \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface $schema
      */
     public function handle(SchemaInterface $schema): void

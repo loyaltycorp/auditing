@@ -16,7 +16,9 @@ final class Auditor extends Manager implements AuditorInterface
     {
         $this->getDbClient()->putItem([
             self::TABLE_NAME_KEY => $dataObject->getTableName(),
-            self::TABLE_ITEM_KEY => $this->getMarshaler()->marshalJson(\json_encode($dataObject->toArray()))
+            self::TABLE_ITEM_KEY => $this->getMarshaler()->marshalJson(
+                \json_encode($dataObject->toArray()) ?: ''
+            )
         ]);
 
         return $dataObject;
