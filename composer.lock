@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "81094430147e7b80b558760d4ede5de3",
+    "content-hash": "6ea247c81d263e93415fa3a59d489cd6",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -752,6 +752,81 @@
             "time": "2018-12-04T22:38:24+00:00"
         },
         {
+            "name": "eoneopay/externals",
+            "version": "v1.0.0-RC6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/loyaltycorp/externals.git",
+                "reference": "e3e86a147180b8ed89fa23652a18036aa744cf4c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/loyaltycorp/externals/zipball/e3e86a147180b8ed89fa23652a18036aa744cf4c",
+                "reference": "e3e86a147180b8ed89fa23652a18036aa744cf4c",
+                "shasum": ""
+            },
+            "require": {
+                "eoneopay/utils": ">=0.2",
+                "ext-json": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "eoneopay/standards": "dev-master",
+                "gedmo/doctrine-extensions": "^2.4",
+                "guzzlehttp/guzzle": "^6.0.0",
+                "illuminate/auth": "^5.8",
+                "illuminate/http": "^5.8",
+                "illuminate/validation": "^5.8",
+                "indigophp/doctrine-annotation-autoload": "^0.1.0",
+                "laravel-doctrine/extensions": "^1.0",
+                "laravel-doctrine/orm": "1.4.*",
+                "league/flysystem": "^1.0",
+                "league/flysystem-aws-s3-v3": "^1.0",
+                "mikey179/vfsstream": "^1.6",
+                "monolog/monolog": "^1.23",
+                "nicoswd/php-gpg": "^1.7",
+                "phpmd/phpmd": "^2.6",
+                "phpstan/phpstan": "^0.11",
+                "phpstan/phpstan-phpunit": "^0.11.0",
+                "phpstan/phpstan-strict-rules": "^0.11.0",
+                "phpunit/phpunit": "^7.0",
+                "roave/security-advisories": "dev-master",
+                "sebastian/phpcpd": "^4.0",
+                "squizlabs/php_codesniffer": "3.*",
+                "vlucas/phpdotenv": "^3.0"
+            },
+            "suggest": {
+                "gedmo/doctrine-extensions": "Required to use ORM extensions",
+                "guzzlehttp/guzzle": "Required to use the http client class",
+                "illuminate/http": "Required to use the laravel request bridge",
+                "illuminate/validation": "Required to use the validate subscriber and laravel validate bridge",
+                "laravel-doctrine/extensions": "Required to use ORM extensions",
+                "laravel-doctrine/orm": "Required to use the ORM class",
+                "league/flysystem": "Required to use the Filesystem class",
+                "league/flysystem-aws-s3-v3": "Required to use the cloud Filesystem class",
+                "monolog/monolog": "Required to use the logger class",
+                "nicoswd/php-gpg": "Required to use the encryption class",
+                "vlucas/phpdotenv": "Required to use the env helper"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EoneoPay\\Externals\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "External libraries shared between Eoneo Pay applications",
+            "keywords": [
+                "external"
+            ],
+            "time": "2019-04-29T06:30:59+00:00"
+        },
+        {
             "name": "eoneopay/standards",
             "version": "dev-master",
             "source": {
@@ -797,6 +872,64 @@
                 "standards"
             ],
             "time": "2019-01-18T03:28:12+00:00"
+        },
+        {
+            "name": "eoneopay/utils",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/loyaltycorp/utils.git",
+                "reference": "a4065b6c191d8c3073e2673f25c8587c6acd56db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/loyaltycorp/utils/zipball/a4065b6c191d8c3073e2673f25c8587c6acd56db",
+                "reference": "a4065b6c191d8c3073e2673f25c8587c6acd56db",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-json": "*",
+                "ext-libxml": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.6",
+                "eoneopay/standards": "dev-master",
+                "ext-bcmath": "*",
+                "illuminate/support": "^5.5",
+                "indigophp/doctrine-annotation-autoload": "^0.1.0",
+                "mockery/mockery": "^1.0",
+                "phpmd/phpmd": "^2.6",
+                "phpstan/phpstan": "^0.11",
+                "phpunit/phpunit": "^7.0",
+                "roave/security-advisories": "dev-master",
+                "sebastian/phpcpd": "^4.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "suggest": {
+                "doctrine/annotations": "Required to use the annotation reader",
+                "ext-bcmath": "To use the Math service",
+                "illuminate/support": "Required to use the configuration service provider in Lumen",
+                "indigophp/doctrine-annotation-autoload": "Recommended to autoload custom doctrine annotations"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EoneoPay\\Utils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Utility and helper classes",
+            "keywords": [
+                "eoneopay",
+                "helpers",
+                "utilities"
+            ],
+            "time": "2019-05-02T04:02:54+00:00"
         },
         {
             "name": "illuminate/auth",
@@ -3231,6 +3364,56 @@
                 }
             ],
             "time": "2017-07-14T14:27:02+00:00"
+        },
+        {
+            "name": "phpoption/phpoption",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/schmittjoh/php-option.git",
+                "reference": "94e644f7d2051a5f0fcf77d81605f152eecff0ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/94e644f7d2051a5f0fcf77d81605f152eecff0ed",
+                "reference": "94e644f7d2051a5f0fcf77d81605f152eecff0ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "PhpOption\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache2"
+            ],
+            "authors": [
+                {
+                    "name": "Johannes M. Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "Option Type for PHP",
+            "keywords": [
+                "language",
+                "option",
+                "php",
+                "type"
+            ],
+            "time": "2015-07-25T16:39:46+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -5860,6 +6043,58 @@
             "time": "2019-04-04T09:56:43+00:00"
         },
         {
+            "name": "vlucas/phpdotenv",
+            "version": "v3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "dbcc609971dd9b55f48b8008b553d79fd372ddde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/dbcc609971dd9b55f48b8008b553d79fd372ddde",
+                "reference": "dbcc609971dd9b55f48b8008b553d79fd372ddde",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4 || ^7.0",
+                "phpoption/phpoption": "^1.5",
+                "symfony/polyfill-ctype": "^1.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.0 || ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dotenv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2019-03-06T09:39:45+00:00"
+        },
+        {
             "name": "webmozart/assert",
             "version": "1.4.0",
             "source": {
@@ -5914,7 +6149,9 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "eoneopay/externals": 5,
         "eoneopay/standards": 20,
+        "eoneopay/utils": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

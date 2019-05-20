@@ -1,7 +1,7 @@
 <?php 
 declare(strict_types=1);
 
-namespace LoyaltyCorp\Auditing;
+namespace LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
 use LoyaltyCorp\Auditing\Entities\AuditLog;

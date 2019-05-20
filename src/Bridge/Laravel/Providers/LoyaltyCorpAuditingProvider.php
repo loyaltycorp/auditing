@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
 use LoyaltyCorp\Auditing\Client\Connection;
-use LoyaltyCorp\Auditing\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\AuditorInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
@@ -48,12 +48,8 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
      */
     private function registerCommands(): void
     {
-        $this->app->singleton('command.create.auditschema', function () {
-            return new CreateSchemaCommand();
-        });
-        $this->app->singleton('command.drop.auditschema', function () {
-            return new DropSchemaCommand();
-        });
+        $this->app->singleton('command.create.auditschema', CreateSchemaCommand::class);
+        $this->app->singleton('command.drop.auditschema', DropSchemaCommand::class);
 
         $this->commands([
             'command.create.auditschema',

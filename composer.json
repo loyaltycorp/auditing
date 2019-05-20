@@ -11,7 +11,9 @@
     "guzzlehttp/guzzle": "^6.3"
   },
   "require-dev": {
+    "eoneopay/externals": "^v1.0@rc",
     "eoneopay/standards": "dev-master",
+    "eoneopay/utils": "dev-master",
     "illuminate/console": "^5.5",
     "laravel/lumen-framework": "^5.5",
     "phpstan/phpstan": "^0.11.6",
@@ -20,7 +22,8 @@
     "phpunit/phpunit": "^7.0",
     "roave/security-advisories": "dev-master",
     "sebastian/phpcpd": "^4.1",
-    "squizlabs/php_codesniffer": "^3.4"
+    "squizlabs/php_codesniffer": "^3.4",
+    "vlucas/phpdotenv": "^3.3"
   },
   "suggest": {
     "laravel/framework": "^5.5",
