@@ -26,8 +26,8 @@ class LogLineTest extends TestCase
         $instance = $this->getInstance();
         self::assertSame('127.0.0.1', $instance->getClientIp());
         self::assertEquals(new DateTime('2019-05-20T11:12:13Z'), $instance->getOccurredAt());
-        self::assertSame(['customer_id' => 11], $instance->getRequestData());
-        self::assertSame(['customer_name' => 'John'], $instance->getResponseData());
+        self::assertSame('HTTP request heads and bodies', $instance->getRequestData());
+        self::assertSame('HTTP response heads and bodies', $instance->getResponseData());
         self::assertSame(1, $instance->getStatus());
     }
 
@@ -40,13 +40,12 @@ class LogLineTest extends TestCase
      */
     public function testToArray(): void
     {
-        // Cannot use assertSame() as there's object inside array.
-        self::assertEquals(
+        self::assertSame(
             [
                 'clientIp' => '127.0.0.1',
-                'occurredAt' => new DateTime('2019-05-20T11:12:13Z'),
-                'requestData' => ['customer_id' => 11],
-                'responseData' => ['customer_name' => 'John'],
+                'occurredAt' => '2019-05-20T11:12:13Z',
+                'requestData' => 'HTTP request heads and bodies',
+                'responseData' => 'HTTP response heads and bodies',
                 'status' => 1
             ],
             $this->getInstance()->toArray()
@@ -77,8 +76,8 @@ class LogLineTest extends TestCase
         return new LogLine(
             '127.0.0.1',
             new DateTime('2019-05-20T11:12:13Z'),
-            ['customer_id' => 11],
-            ['customer_name' => 'John'],
+            'HTTP request heads and bodies',
+            'HTTP response heads and bodies',
             1
         );
     }

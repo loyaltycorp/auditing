@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\DataTransferObjects;
 
 use DateTime;
+use EoneoPay\Utils\Interfaces\UtcDateTimeInterface;
 use LoyaltyCorp\Auditing\DataTransferObject;
 
 class LogLine extends DataTransferObject
@@ -25,19 +26,20 @@ class LogLine extends DataTransferObject
     /**
      * Request data
      *
-     * @var array|mixed[]
+     * @var string
      */
     private $requestData;
 
     /**
      * Response data
      *
-     * @var array|mixed[]
+     * @var string
      */
     private $responseData;
 
     /**
      * Status
+     * This field is for indicating if we've synced this line to Elastic search or not.
      *
      * @var int
      */
@@ -48,15 +50,15 @@ class LogLine extends DataTransferObject
      *
      * @param string $clientIp Client ip
      * @param \DateTime $occurredAt Occurred timestamp
-     * @param mixed[] $requestData Request data
-     * @param mixed[] $responseData Response data
+     * @param string $requestData Request data
+     * @param string $responseData Response data
      * @param int $status Status
      */
     public function __construct(
         string $clientIp,
         DateTime $occurredAt,
-        array $requestData,
-        array $responseData,
+        string $requestData,
+        string $responseData,
         int $status
     ) {
         $this->clientIp = $clientIp;
@@ -89,9 +91,9 @@ class LogLine extends DataTransferObject
     /**
      * Get request data.
      *
-     * @return mixed[]
+     * @return string
      */
-    public function getRequestData(): array
+    public function getRequestData(): string
     {
         return $this->requestData;
     }
@@ -99,9 +101,9 @@ class LogLine extends DataTransferObject
     /**
      * Get response data.
      *
-     * @return mixed[]
+     * @return string
      */
-    public function getResponseData(): array
+    public function getResponseData(): string
     {
         return $this->responseData;
     }
@@ -131,7 +133,7 @@ class LogLine extends DataTransferObject
     {
         return [
             'clientIp' => $this->clientIp,
-            'occurredAt' => $this->occurredAt,
+            'occurredAt' => $this->occurredAt->format(UtcDateTimeInterface::FORMAT_ZULU),
             'requestData' => $this->requestData,
             'responseData' => $this->responseData,
             'status' => $this->status
