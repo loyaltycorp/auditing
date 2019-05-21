@@ -8,7 +8,7 @@ use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 
-class LogWriter implements LogWriterInterface
+final class LogWriter implements LogWriterInterface
 {
     /**
      * Document manager.

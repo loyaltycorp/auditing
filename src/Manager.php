@@ -5,6 +5,7 @@ namespace LoyaltyCorp\Auditing;
 
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
+use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
@@ -65,13 +66,17 @@ abstract class Manager implements DynamoDbAwareInterface
     protected function getDocumentObject(string $documentClass): Document
     {
         if (\class_exists($documentClass) !== true) {
-            // @todo: throw exception
+            throw new InvalidDocumentClassException(
+                \sprintf('Provided document class (%s) is invalid or does not exist.', $documentClass)
+            );
         }
 
         $document = new $documentClass();
 
         if (($document instanceof Document) !== true) {
-            // @todo: throw exception
+            throw new InvalidDocumentClassException(
+                \sprintf('Provided document class (%s) is invalid or does not exist.', $documentClass)
+            );
         }
 
         return $document;

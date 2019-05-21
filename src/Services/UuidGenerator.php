@@ -6,7 +6,7 @@ namespace LoyaltyCorp\Auditing\Services;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 use Ramsey\Uuid\UuidFactoryInterface;
 
-class UuidGenerator implements UuidGeneratorInterface
+final class UuidGenerator implements UuidGeneratorInterface
 {
     /**
      * Uuid factory.
