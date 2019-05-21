@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
-use LoyaltyCorp\Auditing\Entities\AuditLog;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
+use LoyaltyCorp\Auditing\Documents\AuditLog;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 
 final class DropSchemaCommand extends Command
 {
@@ -21,13 +21,13 @@ final class DropSchemaCommand extends Command
     }
 
     /**
-     * Handle creation of auditing schema in DynamoDB.
+     * Handle dropping of auditing schema in DynamoDB.
+     *
+     * @param \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface $schema
      *
      * @return void
-     *
-     * @param \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface $schema
      */
-    public function handle(SchemaInterface $schema): void
+    public function handle(SchemaManagerInterface $schema): void
     {
         $schema->drop((new AuditLog())->getTableName());
 

@@ -7,27 +7,41 @@ use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 
 abstract class Manager implements DynamoDbAwareInterface
 {
     /**
+     * DynamoDb client.
+     *
      * @var \Aws\DynamoDb\DynamoDbClient
      */
     private $dbClient;
 
     /**
+     * Uuid generator instance.
+     *
+     * @var \LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface
+     */
+    private $generator;
+
+    /**
+     * DynamoDb marshaler.
+     *
      * @var \Aws\DynamoDb\Marshaler
      */
     private $marshaler;
 
     /**
-     * Auditor constructor.
+     * Manager constructor.
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface $connection
+     * @param \LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface $generator
      */
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(ConnectionInterface $connection, UuidGeneratorInterface $generator)
     {
         $this->dbClient = $connection->getDbClient();
+        $this->generator = $generator;
         $this->marshaler = new Marshaler();
     }
 
@@ -39,6 +53,16 @@ abstract class Manager implements DynamoDbAwareInterface
     protected function getDbClient(): DynamoDbClient
     {
         return $this->dbClient;
+    }
+
+    /**
+     * Get generator.
+     *
+     * @return \LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface
+     */
+    protected function getGenerator(): UuidGeneratorInterface
+    {
+        return $this->generator;
     }
 
     /**

@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
-use LoyaltyCorp\Auditing\Entities\AuditLog;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
+use LoyaltyCorp\Auditing\Documents\AuditLog;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 
 final class CreateSchemaCommand extends Command
 {
@@ -23,11 +23,11 @@ final class CreateSchemaCommand extends Command
     /**
      * Handle creation of auditing schema in DynamoDB.
      *
-     * @return void
+     * @param \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface $schema
      *
-     * @param \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface $schema
+     * @return void
      */
-    public function handle(SchemaInterface $schema): void
+    public function handle(SchemaManagerInterface $schema): void
     {
         $schema->create(new AuditLog());
         

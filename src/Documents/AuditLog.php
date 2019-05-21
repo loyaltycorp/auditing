@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LoyaltyCorp\Auditing\Entities;
+namespace LoyaltyCorp\Auditing\Documents;
 
-use LoyaltyCorp\Auditing\Entity;
+use LoyaltyCorp\Auditing\Document;
 
-final class AuditLog extends Entity
+final class AuditLog extends Document
 {
     /**
      * {@inheritdoc}

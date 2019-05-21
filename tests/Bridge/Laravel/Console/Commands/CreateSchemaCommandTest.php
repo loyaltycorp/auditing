@@ -5,7 +5,7 @@ namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Tests\LoyaltyCorp\Auditing\Stubs\Managers\SchemaStub;
+use Tests\LoyaltyCorp\Auditing\Stubs\Managers\SchemaManagerStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
@@ -37,7 +37,7 @@ class CreateSchemaCommandTest extends TestCase
         $output = new BufferedOutput();
 
         // Run the command
-        $this->createCommandInstance(CreateSchemaCommand::class, $output)->handle(new SchemaStub());
+        $this->createCommandInstance(CreateSchemaCommand::class, $output)->handle(new SchemaManagerStub());
 
         return $output->fetch();
     }

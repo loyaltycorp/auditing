@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\LoyaltyCorp\Auditing\Entities;
+namespace Tests\LoyaltyCorp\Auditing\Documents;
 
-use Tests\LoyaltyCorp\Auditing\Stubs\EntityStub;
+use Tests\LoyaltyCorp\Auditing\Stubs\DocumentStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
- * @covers \LoyaltyCorp\Auditing\Entity
+ * @covers \LoyaltyCorp\Auditing\Document
  */
-class EntityTest extends TestCase
+class DocumentTest extends TestCase
 {
     /**
      * Test entity successfully.
@@ -18,7 +18,7 @@ class EntityTest extends TestCase
      */
     public function testEntity(): void
     {
-        $entity = new EntityStub();
+        $entity = new DocumentStub();
 
         self::assertSame('EntityStub', $entity->getTableName());
         self::assertSame([

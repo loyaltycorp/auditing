@@ -6,9 +6,10 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=7.1",
-    "aws/aws-sdk-php": "^3.93",
     "ext-json": "*",
-    "guzzlehttp/guzzle": "^6.3"
+    "aws/aws-sdk-php": "^3.93",
+    "guzzlehttp/guzzle": "^6.3",
+    "ramsey/uuid": "^3.8"
   },
   "require-dev": {
     "eoneopay/externals": "^v1.0@rc",

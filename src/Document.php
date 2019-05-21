@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing;
 
+use LoyaltyCorp\Auditing\Interfaces\DocumentInterface;
 use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
-use LoyaltyCorp\Auditing\Interfaces\EntityInterface;
 
-abstract class Entity implements DynamoDbAwareInterface, EntityInterface
+abstract class Document implements DynamoDbAwareInterface, DocumentInterface
 {
     /**
      * Attribute definitions.

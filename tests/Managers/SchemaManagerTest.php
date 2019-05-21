@@ -3,16 +3,17 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Managers;
 
-use LoyaltyCorp\Auditing\Entities\AuditLog;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
-use LoyaltyCorp\Auditing\Managers\Schema;
+use LoyaltyCorp\Auditing\Documents\AuditLog;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
+use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use Tests\LoyaltyCorp\Auditing\Stubs\Services\UuidGeneratorStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
  * @covers \LoyaltyCorp\Auditing\Manager
- * @covers \LoyaltyCorp\Auditing\Managers\Schema
+ * @covers \LoyaltyCorp\Auditing\Managers\SchemaManager
  */
-class SchemaTest extends TestCase
+class SchemaManagerTest extends TestCase
 {
     /**
      * Test create schema successfully.
@@ -37,10 +38,13 @@ class SchemaTest extends TestCase
     /**
      * Get schema manager.
      *
-     * @return \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface
+     * @return \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface
      */
-    private function getSchemaManager(): SchemaInterface
+    private function getSchemaManager(): SchemaManagerInterface
     {
-        return new Schema($this->getConnection($this->getMockHandler()));
+        return new SchemaManager(
+            $this->getConnection($this->getMockHandler()),
+            new UuidGeneratorStub()
+        );
     }
 }

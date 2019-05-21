@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\LoyaltyCorp\Auditing\Entities;
+namespace Tests\LoyaltyCorp\Auditing\Documents;
 
-use LoyaltyCorp\Auditing\Entities\AuditLog;
+use LoyaltyCorp\Auditing\Documents\AuditLog;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
- * @covers \LoyaltyCorp\Auditing\Entities\AuditLog
+ * @covers \LoyaltyCorp\Auditing\Documents\AuditLog
  */
 class AuditLogTest extends TestCase
 {

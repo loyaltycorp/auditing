@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Managers;
 
-use LoyaltyCorp\Auditing\Interfaces\EntityInterface;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
+use LoyaltyCorp\Auditing\Interfaces\DocumentInterface;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 
 /**
  * @coversNothing
  */
-class SchemaStub implements SchemaInterface
+class SchemaManagerStub implements SchemaManagerInterface
 {
     /**
      * @inheritdoc
      */
-    public function create(EntityInterface $entity): bool
+    public function create(DocumentInterface $entity): bool
     {
         return true;
     }

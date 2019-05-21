@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Managers;
 
-use LoyaltyCorp\Auditing\Interfaces\EntityInterface;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
+use LoyaltyCorp\Auditing\Interfaces\DocumentInterface;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 use LoyaltyCorp\Auditing\Manager;
 
-final class Schema extends Manager implements SchemaInterface
+final class SchemaManager extends Manager implements SchemaManagerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function create(EntityInterface $entity): bool
+    public function create(DocumentInterface $entity): bool
     {
         $this->getDbClient()->createTable($entity->toArray());
 

@@ -7,14 +7,22 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
-use LoyaltyCorp\Auditing\Interfaces\Managers\AuditorInterface;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
-use LoyaltyCorp\Auditing\Manager\Auditor;
-use LoyaltyCorp\Auditing\Managers\Schema;
+use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
+use LoyaltyCorp\Auditing\Managers\DocumentManager;
+use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use LoyaltyCorp\Auditing\Services\LogWriter;
+use LoyaltyCorp\Auditing\Services\UuidGenerator;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
+ * @noinspection EfferentObjectCouplingInspection High coupling required to test all required services are bound
+ *
  * @covers \LoyaltyCorp\Auditing\Bridge\Laravel\Providers\LoyaltyCorpAuditingProvider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) High coupling required to test all required services are bound
  */
 class LoyaltyCorpAuditingProviderTest extends TestCase
 {
@@ -27,10 +35,15 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
     {
         $app = $this->createApplication();
 
-        self::assertInstanceOf(Auditor::class, $app->make(AuditorInterface::class));
+        // clients
         self::assertInstanceOf(Connection::class, $app->make(ConnectionInterface::class));
-        self::assertInstanceOf(Schema::class, $app->make(SchemaInterface::class));
-
+        // managers
+        self::assertInstanceOf(DocumentManager::class, $app->make(DocumentManagerInterface::class));
+        self::assertInstanceOf(SchemaManager::class, $app->make(SchemaManagerInterface::class));
+        // services
+        self::assertInstanceOf(LogWriter::class, $app->make(LogWriterInterface::class));
+        self::assertInstanceOf(UuidGenerator::class, $app->make(UuidGeneratorInterface::class));
+        // commands
         self::assertInstanceOf(CreateSchemaCommand::class, $app->make('command.create.auditschema'));
         self::assertInstanceOf(DropSchemaCommand::class, $app->make('command.drop.auditschema'));
     }

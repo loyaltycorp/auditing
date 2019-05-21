@@ -8,11 +8,22 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
-use LoyaltyCorp\Auditing\Interfaces\Managers\AuditorInterface;
-use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaInterface;
-use LoyaltyCorp\Auditing\Manager\Auditor;
-use LoyaltyCorp\Auditing\Managers\Schema;
+use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
+use LoyaltyCorp\Auditing\Managers\DocumentManager;
+use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use LoyaltyCorp\Auditing\Services\LogWriter;
+use LoyaltyCorp\Auditing\Services\UuidGenerator;
+use Ramsey\Uuid\UuidFactory;
+use Ramsey\Uuid\UuidFactoryInterface;
 
+/**
+ * @noinspection EfferentObjectCouplingInspection High coupling required to ensure all services are bound
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) High coupling required to ensure all services are bound
+ */
 class LoyaltyCorpAuditingProvider extends ServiceProvider
 {
     /**
@@ -32,10 +43,15 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
                 \env('AWS_DYNAMODB_VERSION', 'latest')
             );
         });
+        $this->app->singleton(UuidFactoryInterface::class, UuidFactory::class);
 
         // bind managers
-        $this->app->singleton(AuditorInterface::class, Auditor::class);
-        $this->app->singleton(SchemaInterface::class, Schema::class);
+        $this->app->singleton(DocumentManagerInterface::class, DocumentManager::class);
+        $this->app->singleton(SchemaManagerInterface::class, SchemaManager::class);
+
+        // bind services
+        $this->app->singleton(LogWriterInterface::class, LogWriter::class);
+        $this->app->singleton(UuidGeneratorInterface::class, UuidGenerator::class);
 
         // register commands
         $this->registerCommands();
