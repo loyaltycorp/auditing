@@ -25,11 +25,19 @@ class AuditLogTest extends TestCase
             'TableName' => $entity->getTableName(),
             'KeySchema' => [
                 ['AttributeName' => 'occurredAt', 'KeyType' => 'HASH'],
-                ['AttributeName' => 'requestId', 'KeyType' => 'RANGE']
+                ['AttributeName' => 'clientId', 'KeyType' => 'RANGE'],
+                ['AttributeName' => 'requestData', 'KeyType' => 'RANGE'],
+                ['AttributeName' => 'requestId', 'KeyType' => 'RANGE'],
+                ['AttributeName' => 'responseData', 'KeyType' => 'RANGE'],
+                ['AttributeName' => 'status', 'KeyType' => 'RANGE']
             ],
             'AttributeDefinitions' => [
+                ['AttributeName' => 'clientIp', 'AttributeType' => 'S'],
                 ['AttributeName' => 'occurredAt', 'AttributeType' => 'S'],
-                ['AttributeName' => 'requestId', 'AttributeType' => 'S']
+                ['AttributeName' => 'requestData', 'AttributeType' => 'S'],
+                ['AttributeName' => 'requestId', 'AttributeType' => 'S'],
+                ['AttributeName' => 'responseData', 'AttributeType' => 'S'],
+                ['AttributeName' => 'status', 'AttributeType' => 'N']
             ],
             'ProvisionedThroughput' => [
                 'ReadCapacityUnits' => 10,
