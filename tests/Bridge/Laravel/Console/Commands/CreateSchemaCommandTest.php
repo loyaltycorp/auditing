@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\LoyaltyCorp\Auditing\Stubs\Managers\SchemaManagerStub;
+use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Symfony\Component\Console\BufferedOutputStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
@@ -34,7 +34,7 @@ class CreateSchemaCommandTest extends TestCase
      */
     private function runCommand(): string
     {
-        $output = new BufferedOutput();
+        $output = new BufferedOutputStub();
 
         // Run the command
         $this->createCommandInstance(CreateSchemaCommand::class, $output)->handle(new SchemaManagerStub());

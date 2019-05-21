@@ -56,6 +56,28 @@ abstract class Manager implements DynamoDbAwareInterface
     }
 
     /**
+     * Get document object.
+     *
+     * @param string $documentClass
+     *
+     * @return \LoyaltyCorp\Auditing\Document
+     */
+    protected function getDocumentObject(string $documentClass): Document
+    {
+        if (\class_exists($documentClass) !== true) {
+            // @todo: throw exception
+        }
+
+        $document = new $documentClass();
+
+        if (($document instanceof Document) !== true) {
+            // @todo: throw exception
+        }
+
+        return $document;
+    }
+
+    /**
      * Get generator.
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface

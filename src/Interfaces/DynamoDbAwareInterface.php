@@ -10,7 +10,7 @@ interface DynamoDbAwareInterface
      *
      * @const string
      */
-    public const DATA_TYPE_BINARY= 'B';
+    public const DATA_TYPE_BINARY = 'B';
 
     /**
      * Binary set data type

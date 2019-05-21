@@ -29,8 +29,15 @@ final class DropSchemaCommand extends Command
      */
     public function handle(SchemaManagerInterface $schema): void
     {
-        $schema->drop((new AuditLog())->getTableName());
+        $this->error('ATTENTION: This operation should not be executed in a production environment.');
 
-        $this->warn('Audit schema dropped successfully!');
+        if ($this->confirm('Do you wish to continue?') !== true) {
+            $this->info('No action taken, bye!');
+            return;
+        }
+
+        $schema->drop(AuditLog::class);
+
+        $this->info('Audit schema dropped successfully!');
     }
 }

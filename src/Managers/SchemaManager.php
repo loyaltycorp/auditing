@@ -22,10 +22,12 @@ final class SchemaManager extends Manager implements SchemaManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function drop(string $tableName): bool
+    public function drop(string $documentClass): bool
     {
+        $document = $this->getDocumentObject($documentClass);
+
         $this->getDbClient()->deleteTable([
-            self::TABLE_NAME_KEY => $tableName
+            self::TABLE_NAME_KEY => $document->getTableName()
         ]);
 
         return true;

@@ -32,7 +32,7 @@ class SchemaManagerTest extends TestCase
      */
     public function testDrop(): void
     {
-        self::assertTrue($this->getSchemaManager()->drop('AuditLog'));
+        self::assertTrue($this->getSchemaManager()->drop(AuditLog::class));
     }
 
     /**

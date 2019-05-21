@@ -19,9 +19,9 @@ interface SchemaManagerInterface
     /**
      * Drop table.
      *
-     * @param string $tableName Table name to be dropped
+     * @param string $documentClass Document table to be dropped
      *
      * @return bool
      */
-    public function drop(string $tableName): bool;
+    public function drop(string $documentClass): bool;
 }

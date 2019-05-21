@@ -61,7 +61,7 @@ class LogLineTest extends TestCase
      */
     public function testGetTableName(): void
     {
-        self::assertSame('LogLine', $this->getInstance()->getTableName());
+        self::assertSame('AuditLog', $this->getInstance()->getTableName());
     }
 
     /**
