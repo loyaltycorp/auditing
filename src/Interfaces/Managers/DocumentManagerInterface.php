@@ -3,16 +3,17 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Interfaces\Managers;
 
+use Aws\Result;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 
-interface AuditorInterface
+interface DocumentManagerInterface
 {
     /**
-     * Log data item.
+     * Put document item to the database.
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject
      *
-     * @return \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface
+     * @return \Aws\Result
      */
-    public function log(DataObjectInterface $dataObject): DataObjectInterface;
+    public function putItem(DataObjectInterface $dataObject): Result;
 }

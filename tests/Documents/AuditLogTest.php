@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\LoyaltyCorp\Auditing\Entities;
+namespace Tests\LoyaltyCorp\Auditing\Documents;
 
-use LoyaltyCorp\Auditing\Entities\AuditLog;
+use LoyaltyCorp\Auditing\Documents\AuditLog;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
- * @covers \LoyaltyCorp\Auditing\Entities\AuditLog
+ * @covers \LoyaltyCorp\Auditing\Documents\AuditLog
  */
 class AuditLogTest extends TestCase
 {
@@ -24,12 +24,12 @@ class AuditLogTest extends TestCase
         self::assertSame([
             'TableName' => $entity->getTableName(),
             'KeySchema' => [
-                ['AttributeName' => 'occurredAt', 'KeyType' => 'HASH'],
-                ['AttributeName' => 'requestId', 'KeyType' => 'RANGE']
+                ['AttributeName' => 'requestId', 'KeyType' => 'HASH'],
+                ['AttributeName' => 'occurredAt', 'KeyType' => 'RANGE']
             ],
             'AttributeDefinitions' => [
-                ['AttributeName' => 'occurredAt', 'AttributeType' => 'S'],
-                ['AttributeName' => 'requestId', 'AttributeType' => 'S']
+                ['AttributeName' => 'requestId', 'AttributeType' => 'S'],
+                ['AttributeName' => 'occurredAt', 'AttributeType' => 'S']
             ],
             'ProvisionedThroughput' => [
                 'ReadCapacityUnits' => 10,

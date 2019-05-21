@@ -123,7 +123,7 @@ class LogLine extends DataTransferObject
      */
     public function getTableName(): string
     {
-        return 'LogLine';
+        return 'AuditLog';
     }
 
     /**

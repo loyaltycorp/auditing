@@ -30,6 +30,23 @@ class TestCase extends BaseTestCae
     }
 
     /**
+     * Assert that the provided string is a v4 uuid.
+     *
+     * @param string $uuid4
+     *
+     * @return void
+     */
+    protected function assertUuid4(string $uuid4): void
+    {
+        $matches = [];
+        $regex = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
+
+        \preg_match($regex, $uuid4, $matches);
+
+        self::assertTrue(\count($matches) > 0);
+    }
+
+    /**
      * Create command instance
      *
      * @param string $commandClass Command class

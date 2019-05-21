@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs;
 
-use LoyaltyCorp\Auditing\Entity;
+use LoyaltyCorp\Auditing\Document;
 
 /**
  * @coversNothing
  */
-class EntityStub extends Entity
+class DocumentStub extends Document
 {
     /**
      * {@inheritdoc}

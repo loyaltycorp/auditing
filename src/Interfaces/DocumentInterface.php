@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Interfaces;
 
-interface EntityInterface
+interface DocumentInterface
 {
     /**
      * Get schema name.
