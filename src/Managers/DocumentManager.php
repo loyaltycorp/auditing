@@ -50,7 +50,7 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
         } while ($attemptCounter < self::DEFAULT_MAX_ATTEMPTS && $result === null);
 
         // all attempts were exhausted and still could not find a unique request id for the document.
-        if ($attemptCounter >= self::DEFAULT_MAX_ATTEMPTS || $result === null) {
+        if (($result instanceof Result) !== true) {
             throw new DocumentCreateFailedException('Unable to find available request ID for the document.');
         }
 
