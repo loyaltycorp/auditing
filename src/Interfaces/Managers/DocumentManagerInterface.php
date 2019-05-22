@@ -22,7 +22,7 @@ interface DocumentManagerInterface
      *
      * @param string $documentClass
      * @param string|null $expression
-     * @param array|null $attributeValues
+     * @param mixed[]|null $attributeValues
      *
      * @return \Aws\Result
      */

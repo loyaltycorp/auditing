@@ -61,7 +61,6 @@ class LogLine extends DataTransferObject
         DateTime $occurredAt,
         string $requestData,
         string $responseData
-
     ) {
         $this->clientIp = $clientIp;
         $this->lineStatus = $lineStatus;
