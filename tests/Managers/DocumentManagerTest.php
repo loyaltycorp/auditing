@@ -21,21 +21,7 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
 class DocumentManagerTest extends TestCase
 {
     /**
-     * Test create document item in db successfully.
-     *
-     * @return void
-     */
-    public function testCreateSuccessfully(): void
-    {
-        $result = $this->getDocumentManager([
-            'test' => 'ok'
-        ])->create(new DtoStub());
-
-        self::assertSame('ok', $result->get('test'));
-    }
-
-    /**
-     * Test create document item in db successfully.
+     * Test create document item fails with exception.
      *
      * @return void
      */
@@ -50,7 +36,7 @@ class DocumentManagerTest extends TestCase
     }
 
     /**
-     * Test create document item in db successfully.
+     * Test create document item fails with exception after retries.
      *
      * @return void
      */
@@ -66,6 +52,20 @@ class DocumentManagerTest extends TestCase
     }
 
     /**
+     * Test create document item in db successfully.
+     *
+     * @return void
+     */
+    public function testCreateSuccessfully(): void
+    {
+        $result = $this->getDocumentManager([
+            'test' => 'ok'
+        ])->create(new DtoStub());
+
+        self::assertSame('ok', $result->get('test'));
+    }
+
+    /**
      * Get document manager.
      *
      * @param mixed[]|null $data
@@ -73,9 +73,14 @@ class DocumentManagerTest extends TestCase
      * @param bool|null $retries
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable) The request variable is unused intentionally
      */
-    private function getDocumentManager(?array $data = null, ?bool $exception = null, ?bool $retries = null): DocumentManagerInterface
-    {
+    private function getDocumentManager(
+        ?array $data = null,
+        ?bool $exception = null,
+        ?bool $retries = null
+    ): DocumentManagerInterface {
         $handler = $this->createMockHandler($data, $exception);
 
         if ($retries === true) {
@@ -84,7 +89,7 @@ class DocumentManagerTest extends TestCase
                     return new DynamoDbException(
                         $data['message'] ?? 'Mock exception.',
                         $cmd,
-                        $data
+                        $data ?? []
                     );
                 });
             }
@@ -95,5 +100,4 @@ class DocumentManagerTest extends TestCase
             new UuidGeneratorStub()
         );
     }
-
 }

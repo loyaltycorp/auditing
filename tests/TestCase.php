@@ -11,7 +11,6 @@ use Illuminate\Console\Command;
 use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
-use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
 use PHPUnit\Framework\TestCase as BaseTestCae;
 use Psr\Http\Message\RequestInterface;
 use ReflectionClass;
@@ -19,6 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @coversNothing
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Centralised logic for all tests
  */
 class TestCase extends BaseTestCae
 {
@@ -88,6 +89,8 @@ class TestCase extends BaseTestCae
      * @param bool|null $exception
      *
      * @return \Aws\MockHandler
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable) The request variable is unused intentionally
      */
     protected function createMockHandler(?array $result = null, ?bool $exception = null): MockHandler
     {
