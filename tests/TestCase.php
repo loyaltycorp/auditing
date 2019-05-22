@@ -11,6 +11,7 @@ use Illuminate\Console\Command;
 use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
+use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
 use PHPUnit\Framework\TestCase as BaseTestCae;
 use Psr\Http\Message\RequestInterface;
 use ReflectionClass;
@@ -103,7 +104,6 @@ class TestCase extends BaseTestCae
             });
 
             return $handler;
-
         }
 
         $handler->append(new Result($result));
