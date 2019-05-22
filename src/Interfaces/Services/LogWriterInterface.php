@@ -16,4 +16,13 @@ interface LogWriterInterface
      * @return \Aws\Result
      */
     public function write(DataObjectInterface $dataObject): Result;
+
+    /**
+     * List log lines by line status.
+     *
+     * @param int $lineStatus
+     *
+     * @return \Aws\Result
+     */
+    public function listByLineStatus(int $lineStatus): Result;
 }
