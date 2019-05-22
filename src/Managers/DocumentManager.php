@@ -23,7 +23,7 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
 
         do {
             $data = \array_merge($dataObject->toArray(), [
-                'requestId' => '59f02751-42e2-49e8-adeb-cbb41e3aa450'
+                'requestId' => $this->getGenerator()->uuid4()
             ]);
 
             $item = $this->getMarshaler()->marshalJson(\json_encode($data) ?: '');

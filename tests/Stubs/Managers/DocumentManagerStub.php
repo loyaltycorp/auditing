@@ -21,4 +21,14 @@ class DocumentManagerStub implements DocumentManagerInterface
             'test' => 'ok'
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function list(string $documentClass, ?string $expression = null, ?array $attributeValues = null): Result
+    {
+        return new Result([
+            'Items' => [['test' => 'ok']]
+        ]);
+    }
 }

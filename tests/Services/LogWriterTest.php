@@ -15,6 +15,18 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
 class LogWriterTest extends TestCase
 {
     /**
+     * Test list logs items by line status returns expected number of results.
+     *
+     * @return void
+     */
+    public function testListByLineStatusSuccessfully(): void
+    {
+        $result = $this->getService()->listByLineStatus(1);
+
+        self::assertCount(1, $result->toArray()['Items']);
+    }
+
+    /**
      * Test write log successfully.
      *
      * @return void
