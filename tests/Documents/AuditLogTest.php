@@ -24,12 +24,10 @@ class AuditLogTest extends TestCase
         self::assertSame([
             'TableName' => $entity->getTableName(),
             'KeySchema' => [
-                ['AttributeName' => 'requestId', 'KeyType' => 'HASH'],
-                ['AttributeName' => 'occurredAt', 'KeyType' => 'RANGE']
+                ['AttributeName' => 'requestId', 'KeyType' => 'HASH']
             ],
             'AttributeDefinitions' => [
-                ['AttributeName' => 'requestId', 'AttributeType' => 'S'],
-                ['AttributeName' => 'occurredAt', 'AttributeType' => 'S']
+                ['AttributeName' => 'requestId', 'AttributeType' => 'S']
             ],
             'ProvisionedThroughput' => [
                 'ReadCapacityUnits' => 10,

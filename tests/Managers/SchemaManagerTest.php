@@ -75,7 +75,7 @@ class SchemaManagerTest extends TestCase
     private function getSchemaManager(): SchemaManagerInterface
     {
         return new SchemaManager(
-            $this->getConnection($this->getMockHandler()),
+            $this->getConnection(),
             new UuidGeneratorStub()
         );
     }

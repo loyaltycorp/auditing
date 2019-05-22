@@ -17,7 +17,7 @@ class ConnectionTest extends TestCase
      */
     public function testGetDbClient(): void
     {
-        $conn = $this->getConnection($this->getMockHandler());
+        $conn = $this->getConnection();
 
         self::assertSame('localhost', $conn->getDbClient()->getEndpoint()->getHost());
         self::assertSame(8000, $conn->getDbClient()->getEndpoint()->getPort());

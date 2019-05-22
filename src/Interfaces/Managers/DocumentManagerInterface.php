@@ -15,5 +15,5 @@ interface DocumentManagerInterface
      *
      * @return \Aws\Result
      */
-    public function putItem(DataObjectInterface $dataObject): Result;
+    public function create(DataObjectInterface $dataObject): Result;
 }

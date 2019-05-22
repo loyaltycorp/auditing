@@ -15,7 +15,7 @@ class DocumentManagerStub implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function putItem(DataObjectInterface $dataObject): Result
+    public function create(DataObjectInterface $dataObject): Result
     {
         return new Result([
             'test' => 'ok'

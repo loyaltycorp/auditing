@@ -24,7 +24,7 @@ class DocumentManagerTest extends TestCase
     {
         $result = $this->getDocumentManager([
             'test' => 'ok'
-        ])->putItem(new DtoStub());
+        ])->create(new DtoStub());
 
         self::assertSame('ok', $result->get('test'));
     }
@@ -39,7 +39,7 @@ class DocumentManagerTest extends TestCase
     private function getDocumentManager(?array $data = null): DocumentManagerInterface
     {
         return new DocumentManager(
-            $this->getConnection($this->getMockHandler($data)),
+            $this->getConnection($this->createMockHandler($data)),
             new UuidGeneratorStub()
         );
     }
