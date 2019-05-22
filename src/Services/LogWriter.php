@@ -32,7 +32,6 @@ final class LogWriter implements LogWriterInterface
      */
     public function write(DataObjectInterface $dataObject): Result
     {
-        // @todo: implement retry on exception
-        return $this->docManager->putItem($dataObject);
+        return $this->docManager->create($dataObject);
     }
 }
