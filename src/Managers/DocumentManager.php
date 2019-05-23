@@ -83,7 +83,6 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
             }
 
             return $items;
-
         } catch (DynamoDbException $exception) {
             throw new DocumentQueryFailedException('Failed to query document.', null, $exception);
         }

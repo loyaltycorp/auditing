@@ -54,9 +54,9 @@ final class LogWriter implements LogWriterInterface
     }
 
     /**
-     * Hydrage log line dtos
+     * Hydrate log line dtos
      *
-     * @param array $items
+     * @param mixed[] $items Items to hydrate
      *
      * @return \LoyaltyCorp\Auditing\DataTransferObjects\LogLine[]
      *

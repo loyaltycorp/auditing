@@ -22,7 +22,7 @@ class DocumentManagerStub implements DocumentManagerInterface
     /**
      * Construct DocumentManager stub
      *
-     * @param array|null $results
+     * @param mixed[]|null $results Sample results
      */
     public function __construct(?array $results = null)
     {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Interfaces\Services;
 
-use Aws\Result;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 
 interface LogWriterInterface
