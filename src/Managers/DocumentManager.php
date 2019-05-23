@@ -65,17 +65,25 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
         string $documentClass,
         ?string $expression = null,
         ?array $attributeValues = null
-    ): Result {
+    ): array {
+        $items = [];
         $document = $this->getDocumentObject($documentClass);
 
         try {
-            return $this->getDbClient()->scan([
+            $result = $this->getDbClient()->scan([
                 self::TABLE_NAME_KEY => $document->getTableName(),
                 'FilterExpression' => $expression ?? '',
                 'ExpressionAttributeValues' => $this->getMarshaler()->marshalJson(
                     \json_encode($attributeValues ?? []) ?: ''
                 )
             ]);
+
+            for ($i = 0; $i < $result->count(); $i++) {
+                $items[] = $this->getMarshaler()->unmarshalItem($result->get('Items')[$i]);
+            }
+
+            return $items;
+
         } catch (DynamoDbException $exception) {
             throw new DocumentQueryFailedException('Failed to query document.', null, $exception);
         }

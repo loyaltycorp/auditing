@@ -13,16 +13,16 @@ interface LogWriterInterface
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject
      *
-     * @return \Aws\Result
+     * @return void
      */
-    public function write(DataObjectInterface $dataObject): Result;
+    public function write(DataObjectInterface $dataObject): void;
 
     /**
      * List log lines by line status.
      *
      * @param int $lineStatus
      *
-     * @return \Aws\Result
+     * @return \LoyaltyCorp\Auditing\DataTransferObjects\LogLine[]
      */
-    public function listByLineStatus(int $lineStatus): Result;
+    public function listByLineStatus(int $lineStatus): array;
 }

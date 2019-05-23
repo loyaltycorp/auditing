@@ -24,11 +24,11 @@ interface DocumentManagerInterface
      * @param string|null $expression
      * @param mixed[]|null $attributeValues
      *
-     * @return \Aws\Result
+     * @return mixed[]
      */
     public function list(
         string $documentClass,
         ?string $expression = null,
         ?array $attributeValues = null
-    ): Result;
+    ): array;
 }

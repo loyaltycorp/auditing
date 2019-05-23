@@ -13,6 +13,23 @@ use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 class DocumentManagerStub implements DocumentManagerInterface
 {
     /**
+     * Result data.
+     *
+     * @var mixed[]
+     */
+    private $results;
+
+    /**
+     * Construct DocumentManager stub
+     *
+     * @param array|null $results
+     */
+    public function __construct(?array $results = null)
+    {
+        $this->results = $results ?? [];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function create(DataObjectInterface $dataObject): Result
@@ -25,10 +42,8 @@ class DocumentManagerStub implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function list(string $documentClass, ?string $expression = null, ?array $attributeValues = null): Result
+    public function list(string $documentClass, ?string $expression = null, ?array $attributeValues = null): array
     {
-        return new Result([
-            'Items' => [['test' => 'ok']]
-        ]);
+        return $this->results;
     }
 }

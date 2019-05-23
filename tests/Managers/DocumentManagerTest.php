@@ -74,12 +74,16 @@ class DocumentManagerTest extends TestCase
      */
     public function testListSuccessfully(): void
     {
-        $json = \json_encode(['attr' => 'value']) ?: '';
-        $result = $this->getDocumentManager([
-            'Items' => [$this->getMarshaler()->marshalJson($json)]
+        $json1 = \json_encode(['attr' => 'value1']) ?: '';
+        $json2 = \json_encode(['attr' => 'value2']) ?: '';
+        $results = $this->getDocumentManager([
+            'Items' => [
+                $this->getMarshaler()->marshalJson($json1),
+                $this->getMarshaler()->marshalJson($json2)
+            ]
         ])->list(DocumentStub::class, 'attr = :val', ['val' => 'value']);
 
-        self::assertCount(1, $result->toArray()['Items']);
+        self::assertCount(2, $results);
     }
 
     /**

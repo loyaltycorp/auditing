@@ -28,7 +28,7 @@ class TestCase extends BaseTestCae
     /**
      * DynamoDb Marshaler instance.
      *
-     * @var \Aws\DynamoDb\Marshaler
+     * @var \Aws\DynamoDb\Marshaler|null
      */
     private $marshaler;
 
@@ -151,7 +151,7 @@ class TestCase extends BaseTestCae
      */
     protected function getMarshaler(): Marshaler
     {
-        if ($this->marshaler === null) {
+        if (($this->marshaler instanceof Marshaler) === false) {
             $this->marshaler = new Marshaler();
         }
 
