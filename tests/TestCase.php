@@ -138,7 +138,7 @@ class TestCase extends BaseTestCae
             'ap-southeast-2',
             'http://localhost:8000',
             'latest',
-            $handler ?? $this->createMockHandler()
+            ['handler' => $handler ?? $this->createMockHandler()]
         );
 
         return $conn;
