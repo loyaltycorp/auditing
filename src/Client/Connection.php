@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Client;
 
 use Aws\DynamoDb\DynamoDbClient;
-use Countable;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 
 final class Connection implements ConnectionInterface
@@ -24,7 +23,8 @@ final class Connection implements ConnectionInterface
      * @param string $region AWS region
      * @param string|null $endpoint Endpoint url
      * @param string|null $version Version
-     * @param \Countable|null $handler Custom handler
+     * @param mixed|null $handler Custom handler - A handler that accepts a command object, request object and returns
+     * a promise that is fulfilled with an Aws\ResultInterface object or rejected with an Aws\Exception\AwsException
      */
     public function __construct(
         string $key,
@@ -32,7 +32,7 @@ final class Connection implements ConnectionInterface
         string $region,
         ?string $endpoint = null,
         ?string $version = null,
-        ?Countable $handler = null
+        $handler = null
     ) {
         $this->dbClient = new DynamoDbClient(\array_merge([
             'credentials' => [
