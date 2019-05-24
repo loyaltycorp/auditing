@@ -53,14 +53,14 @@ class LogLine extends DataTransferObject
      * @param int $lineStatus Status
      * @param \DateTime $occurredAt Occurred timestamp
      * @param string $requestData Request data
-     * @param string $responseData Response data
+     * @param string|null $responseData Response data
      */
     public function __construct(
         string $clientIp,
         int $lineStatus,
         DateTime $occurredAt,
         string $requestData,
-        string $responseData
+        ?string $responseData
     ) {
         $this->clientIp = $clientIp;
         $this->lineStatus = $lineStatus;

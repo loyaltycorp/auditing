@@ -21,15 +21,15 @@ class LogHttpRequestTest extends TestCase
      *
      * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
-    public function testSomething(): void
+    public function testHandlingJob(): void
     {
         $logWriter = new LogWriterStub();
         $logLine = new LogLine(
             '127.0.0.1',
+            0,
             new DateTime(),
             '{}',
-            '{}',
-            0
+            '{}'
         );
 
         $this->getInstance($logLine)->handle($logWriter);

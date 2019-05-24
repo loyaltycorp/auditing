@@ -28,10 +28,10 @@ class LogLineFactory implements LogLineFactoryInterface
     ): LogLine {
         return new LogLine(
             $ipAddress,
+            0,
             $now,
             $this->getStreamContentTruncated($request->getBody()),
-            $response instanceof ResponseInterface ? $this->getStreamContentTruncated($response->getBody()) : null,
-            0
+            $response instanceof ResponseInterface ? $this->getStreamContentTruncated($response->getBody()) : null
         );
     }
 

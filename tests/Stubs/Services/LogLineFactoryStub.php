@@ -22,10 +22,10 @@ class LogLineFactoryStub implements LogLineFactoryInterface
     ): LogLine {
         return new LogLine(
             $ipAddress,
+            0,
             $now,
             $request->getBody()->getContents(),
-            $response instanceof ResponseInterface ? $response->getBody()->getContents() : null,
-            0
+            $response instanceof ResponseInterface ? $response->getBody()->getContents() : null
         );
     }
 }

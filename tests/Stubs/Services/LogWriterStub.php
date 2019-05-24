@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Services;
 
-use Aws\Result;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 
@@ -20,10 +19,16 @@ class LogWriterStub implements LogWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(DataObjectInterface $dataObject): Result
+    public function listByLineStatus(int $lineStatus): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(DataObjectInterface $dataObject): void
     {
         $this->writtenDtos[] = $dataObject;
-
-        return new Result();
     }
 }

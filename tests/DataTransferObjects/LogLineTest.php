@@ -25,10 +25,10 @@ class LogLineTest extends TestCase
     {
         $logLine = new LogLine(
             '127.0.0.1',
+            0,
             new DateTime('2019-05-01T12:12:12'),
             '{"data":"some good content"}',
-            '{"data":"even better content"}',
-            0
+            '{"data":"even better content"}'
         );
 
         $serialized = \serialize($logLine);
