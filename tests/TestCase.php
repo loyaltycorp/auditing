@@ -3,21 +3,35 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing;
 
+use Aws\CommandInterface;
+use Aws\DynamoDb\Exception\DynamoDbException;
+use Aws\DynamoDb\Marshaler;
+use Aws\MockHandler;
 use Aws\Result;
-use GuzzleHttp\Promise;
 use Illuminate\Console\Command;
 use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use PHPUnit\Framework\TestCase as BaseTestCae;
+use Psr\Http\Message\RequestInterface;
 use ReflectionClass;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @coversNothing
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Centralised logic for all tests
+ * @SuppressWarnings(PHPMD.NumberOfChildren) All tests extend this class
  */
 class TestCase extends BaseTestCae
 {
+    /**
+     * DynamoDb Marshaler instance.
+     *
+     * @var \Aws\DynamoDb\Marshaler|null
+     */
+    private $marshaler;
+
     /**
      * Creates the application.
      *
@@ -78,13 +92,45 @@ class TestCase extends BaseTestCae
     }
 
     /**
+     * Create mock handler with response.
+     *
+     * @param mixed[]|null $result
+     * @param bool|null $exception
+     *
+     * @return \Aws\MockHandler
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable) The request variable is unused intentionally
+     */
+    protected function createMockHandler(?array $result = null, ?bool $exception = null): MockHandler
+    {
+        $handler = new MockHandler();
+        $result = $result ?? [];
+
+        if ($exception === true) {
+            $handler->append(function (CommandInterface $cmd, RequestInterface $req) use ($result) {
+                return new DynamoDbException(
+                    $result['message'] ?? 'Mock exception.',
+                    $cmd,
+                    $result
+                );
+            });
+
+            return $handler;
+        }
+
+        $handler->append(new Result($result));
+
+        return $handler;
+    }
+
+    /**
      * Get connection.
      *
-     * @param \Closure $handler
+     * @param \Aws\MockHandler $handler
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface
      */
-    protected function getConnection(?\Closure $handler = null): ConnectionInterface
+    protected function getConnection(?MockHandler $handler = null): ConnectionInterface
     {
         $conn = new Connection(
             'key',
@@ -92,26 +138,23 @@ class TestCase extends BaseTestCae
             'ap-southeast-2',
             'http://localhost:8000',
             'latest',
-            $handler
+            ['handler' => $handler ?? $this->createMockHandler()]
         );
 
         return $conn;
     }
 
     /**
-     * Get mock handler for AWS connection.
+     * Get DynamoDb marshaler.
      *
-     * @param mixed[]|null $result
-     *
-     * @return \Closure
+     * @return \Aws\DynamoDb\Marshaler
      */
-    protected function getMockHandler(?array $result = null): \Closure
+    protected function getMarshaler(): Marshaler
     {
-        $myHandler = function () use ($result) {
-            $result = new Result($result ?? []);
-            return Promise\promise_for($result);
-        };
+        if (($this->marshaler instanceof Marshaler) === false) {
+            $this->marshaler = new Marshaler();
+        }
 
-        return $myHandler;
+        return $this->marshaler;
     }
 }

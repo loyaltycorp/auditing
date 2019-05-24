@@ -17,6 +17,15 @@ class LogLine extends DataTransferObject
     private $clientIp;
 
     /**
+     * Line status
+     *
+     * This field is for indicating if we've synced this line to Elastic search or not.
+     *
+     * @var int
+     */
+    private $lineStatus;
+
+    /**
      * Occurred timestamp
      *
      * @var \DateTime
@@ -33,39 +42,31 @@ class LogLine extends DataTransferObject
     /**
      * Response data
      *
-     * @var string
+     * @var string|null
      */
     private $responseData;
-
-    /**
-     * Status
-     * This field is for indicating if we've synced this line to Elastic search or not.
-     *
-     * @var int
-     */
-    private $status;
 
     /**
      * LogLineDto constructor.
      *
      * @param string $clientIp Client ip
+     * @param int $lineStatus Status
      * @param \DateTime $occurredAt Occurred timestamp
      * @param string $requestData Request data
-     * @param string $responseData Response data
-     * @param int $status Status
+     * @param string|null $responseData Response data
      */
     public function __construct(
         string $clientIp,
+        int $lineStatus,
         DateTime $occurredAt,
         string $requestData,
-        string $responseData,
-        int $status
+        ?string $responseData
     ) {
         $this->clientIp = $clientIp;
+        $this->lineStatus = $lineStatus;
         $this->occurredAt = $occurredAt;
         $this->requestData = $requestData;
         $this->responseData = $responseData;
-        $this->status = $status;
     }
 
     /**
@@ -76,6 +77,16 @@ class LogLine extends DataTransferObject
     public function getClientIp(): string
     {
         return $this->clientIp;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return int
+     */
+    public function getLineStatus(): int
+    {
+        return $this->lineStatus;
     }
 
     /**
@@ -101,21 +112,11 @@ class LogLine extends DataTransferObject
     /**
      * Get response data.
      *
-     * @return string
+     * @return string|null
      */
-    public function getResponseData(): string
+    public function getResponseData(): ?string
     {
         return $this->responseData;
-    }
-
-    /**
-     * Get status.
-     *
-     * @return int
-     */
-    public function getStatus(): int
-    {
-        return $this->status;
     }
 
     /**
@@ -133,10 +134,10 @@ class LogLine extends DataTransferObject
     {
         return [
             'clientIp' => $this->clientIp,
+            'lineStatus' => $this->lineStatus,
             'occurredAt' => $this->occurredAt->format(UtcDateTimeInterface::FORMAT_ZULU),
             'requestData' => $this->requestData,
-            'responseData' => $this->responseData,
-            'status' => $this->status
+            'responseData' => $this->responseData
         ];
     }
 }

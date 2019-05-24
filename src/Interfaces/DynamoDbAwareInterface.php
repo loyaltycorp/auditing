@@ -6,6 +6,13 @@ namespace LoyaltyCorp\Auditing\Interfaces;
 interface DynamoDbAwareInterface
 {
     /**
+     * Condition expression key
+     *
+     * @const string
+     */
+    public const CONDITION_EXPRESSION_KEY = 'ConditionExpression';
+
+    /**
      * Binary data type
      *
      * @const string
@@ -53,6 +60,13 @@ interface DynamoDbAwareInterface
      * @const string
      */
     public const DATA_TYPE_STRING_SET = 'SS';
+
+    /**
+     * Default max attempts
+     *
+     * @const int
+     */
+    public const DEFAULT_MAX_ATTEMPTS = 15;
 
     /**
      * Default throughput read capacity

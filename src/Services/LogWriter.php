@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Services;
 
-use Aws\Result;
+use DateTime;
+use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
+use LoyaltyCorp\Auditing\Documents\AuditLog;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
@@ -30,9 +32,49 @@ final class LogWriter implements LogWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(DataObjectInterface $dataObject): Result
+    public function write(DataObjectInterface $dataObject): void
     {
-        // @todo: implement retry on exception
-        return $this->docManager->putItem($dataObject);
+        $this->docManager->create($dataObject);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Exception
+     */
+    public function listByLineStatus(int $lineStatus): array
+    {
+        $items = $this->docManager->list(
+            AuditLog::class,
+            'lineStatus = :lineStatus',
+            [':lineStatus' => $lineStatus]
+        );
+
+        return $this->hydrate($items);
+    }
+
+    /**
+     * Hydrate log line dtos
+     *
+     * @param mixed[] $items Items to hydrate
+     *
+     * @return \LoyaltyCorp\Auditing\DataTransferObjects\LogLine[]
+     *
+     * @throws \Exception
+     */
+    private function hydrate(array $items): array
+    {
+        $objects = [];
+        foreach ($items as $item) {
+            $objects[] = new LogLine(
+                $item['clientIp'],
+                $item['lineStatus'],
+                new DateTime($item['occurredAt']),
+                $item['responseData'],
+                $item['requestData']
+            );
+        }
+
+        return $objects;
     }
 }
