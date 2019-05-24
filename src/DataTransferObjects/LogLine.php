@@ -33,7 +33,7 @@ class LogLine extends DataTransferObject
     /**
      * Response data
      *
-     * @var string
+     * @var string|null
      */
     private $responseData;
 
@@ -58,7 +58,7 @@ class LogLine extends DataTransferObject
         string $clientIp,
         DateTime $occurredAt,
         string $requestData,
-        string $responseData,
+        ?string $responseData,
         int $status
     ) {
         $this->clientIp = $clientIp;
@@ -101,9 +101,9 @@ class LogLine extends DataTransferObject
     /**
      * Get response data.
      *
-     * @return string
+     * @return string|null
      */
-    public function getResponseData(): string
+    public function getResponseData(): ?string
     {
         return $this->responseData;
     }

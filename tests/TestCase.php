@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @coversNothing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Centralised logic for all tests
+ * @SuppressWarnings(PHPMD.NumberOfChildren) All tests extend this class
  */
 class TestCase extends BaseTestCae
 {
