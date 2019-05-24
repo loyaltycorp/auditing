@@ -14,10 +14,12 @@ use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use LoyaltyCorp\Auditing\Services\Factories\Psr7Factory;
 use LoyaltyCorp\Auditing\Services\LogWriter;
 use LoyaltyCorp\Auditing\Services\UuidGenerator;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 
 /**
  * @noinspection EfferentObjectCouplingInspection High coupling required to ensure all services are bound
@@ -52,6 +54,9 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
         // bind services
         $this->app->singleton(LogWriterInterface::class, LogWriter::class);
         $this->app->singleton(UuidGeneratorInterface::class, UuidGenerator::class);
+
+        // bind factories
+        $this->app->singleton(HttpMessageFactoryInterface::class, Psr7Factory::class);
 
         // register commands
         $this->registerCommands();
