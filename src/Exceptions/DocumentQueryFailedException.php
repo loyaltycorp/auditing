@@ -6,10 +6,10 @@ namespace LoyaltyCorp\Auditing\Exceptions;
 use RuntimeException;
 use Throwable;
 
-final class DocumentCreateFailedException extends RuntimeException
+final class DocumentQueryFailedException extends RuntimeException
 {
     /**
-     * DocumentCreateFailedException constructor.
+     * DocumentQueryFailedException constructor.
      *
      * @param string|null $message
      * @param int|null $code

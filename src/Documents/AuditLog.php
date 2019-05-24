@@ -21,7 +21,8 @@ final class AuditLog extends Document
     protected function getAttributeDefinition(): array
     {
         return [
-            ['AttributeName' => 'requestId', 'AttributeType' => self::DATA_TYPE_STRING]
+            ['AttributeName' => 'requestId', 'AttributeType' => self::DATA_TYPE_STRING],
+            ['AttributeName' => 'lineStatus', 'AttributeType' => self::DATA_TYPE_NUMBER]
         ];
     }
 
@@ -32,7 +33,8 @@ final class AuditLog extends Document
     {
         return [
             // first index has to be of type HASH
-            ['AttributeName' => 'requestId', 'KeyType' => self::KEY_TYPE_HASH]
+            ['AttributeName' => 'requestId', 'KeyType' => self::KEY_TYPE_HASH],
+            ['AttributeName' => 'lineStatus', 'KeyType' => self::KEY_TYPE_RANGE]
         ];
     }
 }

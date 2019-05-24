@@ -5,6 +5,7 @@ namespace Tests\LoyaltyCorp\Auditing;
 
 use Aws\CommandInterface;
 use Aws\DynamoDb\Exception\DynamoDbException;
+use Aws\DynamoDb\Marshaler;
 use Aws\MockHandler;
 use Aws\Result;
 use Illuminate\Console\Command;
@@ -24,6 +25,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class TestCase extends BaseTestCae
 {
+    /**
+     * DynamoDb Marshaler instance.
+     *
+     * @var \Aws\DynamoDb\Marshaler|null
+     */
+    private $marshaler;
+
     /**
      * Creates the application.
      *
@@ -130,9 +138,23 @@ class TestCase extends BaseTestCae
             'ap-southeast-2',
             'http://localhost:8000',
             'latest',
-            $handler ?? $this->createMockHandler()
+            ['handler' => $handler ?? $this->createMockHandler()]
         );
 
         return $conn;
+    }
+
+    /**
+     * Get DynamoDb marshaler.
+     *
+     * @return \Aws\DynamoDb\Marshaler
+     */
+    protected function getMarshaler(): Marshaler
+    {
+        if (($this->marshaler instanceof Marshaler) === false) {
+            $this->marshaler = new Marshaler();
+        }
+
+        return $this->marshaler;
     }
 }

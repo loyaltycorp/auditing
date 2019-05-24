@@ -63,7 +63,7 @@ class LogLineTest extends TestCase
         self::assertEquals(new DateTime('2019-05-20T11:12:13Z'), $instance->getOccurredAt());
         self::assertSame('HTTP request heads and bodies', $instance->getRequestData());
         self::assertSame('HTTP response heads and bodies', $instance->getResponseData());
-        self::assertSame(1, $instance->getStatus());
+        self::assertSame(1, $instance->getLineStatus());
     }
 
     /**
@@ -78,10 +78,10 @@ class LogLineTest extends TestCase
         self::assertSame(
             [
                 'clientIp' => '127.0.0.1',
+                'lineStatus' => 1,
                 'occurredAt' => '2019-05-20T11:12:13Z',
                 'requestData' => 'HTTP request heads and bodies',
-                'responseData' => 'HTTP response heads and bodies',
-                'status' => 1
+                'responseData' => 'HTTP response heads and bodies'
             ],
             $this->getInstance()->toArray()
         );
@@ -98,10 +98,10 @@ class LogLineTest extends TestCase
     {
         return new LogLine(
             '127.0.0.1',
+            1,
             new DateTime('2019-05-20T11:12:13Z'),
             'HTTP request heads and bodies',
             'HTTP response heads and bodies',
-            1
         );
     }
 }

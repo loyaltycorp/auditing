@@ -6,10 +6,12 @@ namespace Tests\LoyaltyCorp\Auditing\Managers;
 use Aws\CommandInterface;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use LoyaltyCorp\Auditing\Exceptions\DocumentCreateFailedException;
+use LoyaltyCorp\Auditing\Exceptions\DocumentQueryFailedException;
 use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use Psr\Http\Message\RequestInterface;
+use Tests\LoyaltyCorp\Auditing\Stubs\DocumentStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\DtoStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Services\UuidGeneratorStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
@@ -63,6 +65,40 @@ class DocumentManagerTest extends TestCase
         ])->create(new DtoStub());
 
         self::assertSame('ok', $result->get('test'));
+    }
+
+    /**
+     * Test that list document items will return expected number of items.
+     *
+     * @return void
+     */
+    public function testListSuccessfully(): void
+    {
+        $json1 = \json_encode(['attr' => 'value1']) ?: '';
+        $json2 = \json_encode(['attr' => 'value2']) ?: '';
+        $results = $this->getDocumentManager([
+            'Items' => [
+                $this->getMarshaler()->marshalJson($json1),
+                $this->getMarshaler()->marshalJson($json2)
+            ]
+        ])->list(DocumentStub::class, 'attr = :val', ['val' => 'value']);
+
+        self::assertCount(2, $results);
+    }
+
+    /**
+     * Test the list document items will throw DocumentQueryFailedException
+     *
+     * @return void
+     */
+    public function testListThrowsException(): void
+    {
+        $this->expectException(DocumentQueryFailedException::class);
+        $this->expectExceptionMessage('Failed to query document.');
+
+        $this->getDocumentManager([
+            'message' => 'Failed to retrieve document items.'
+        ], true)->list(DocumentStub::class, 'attr = :val', ['val' => 'value']);
     }
 
     /**

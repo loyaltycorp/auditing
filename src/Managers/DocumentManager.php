@@ -6,6 +6,7 @@ namespace LoyaltyCorp\Auditing\Managers;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\Result;
 use LoyaltyCorp\Auditing\Exceptions\DocumentCreateFailedException;
+use LoyaltyCorp\Auditing\Exceptions\DocumentQueryFailedException;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Manager;
@@ -55,5 +56,35 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function list(
+        string $documentClass,
+        ?string $expression = null,
+        ?array $attributeValues = null
+    ): array {
+        $items = [];
+        $document = $this->getDocumentObject($documentClass);
+
+        try {
+            $result = $this->getDbClient()->scan([
+                self::TABLE_NAME_KEY => $document->getTableName(),
+                'FilterExpression' => $expression ?? '',
+                'ExpressionAttributeValues' => $this->getMarshaler()->marshalJson(
+                    \json_encode($attributeValues ?? []) ?: ''
+                )
+            ]);
+
+            for ($i = 0; $i < $result->count(); $i++) {
+                $items[] = $this->getMarshaler()->unmarshalItem($result->get('Items')[$i]);
+            }
+
+            return $items;
+        } catch (DynamoDbException $exception) {
+            throw new DocumentQueryFailedException('Failed to query document.', null, $exception);
+        }
     }
 }

@@ -9,11 +9,26 @@ use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 interface DocumentManagerInterface
 {
     /**
-     * Put document item to the database.
+     * Create document item to the database.
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject
      *
      * @return \Aws\Result
      */
     public function create(DataObjectInterface $dataObject): Result;
+
+    /**
+     * List document items by give expression.
+     *
+     * @param string $documentClass
+     * @param string|null $expression
+     * @param mixed[]|null $attributeValues
+     *
+     * @return mixed[]
+     */
+    public function list(
+        string $documentClass,
+        ?string $expression = null,
+        ?array $attributeValues = null
+    ): array;
 }
