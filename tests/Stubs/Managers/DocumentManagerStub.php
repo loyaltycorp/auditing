@@ -46,4 +46,14 @@ class DocumentManagerStub implements DocumentManagerInterface
     {
         return $this->results;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(string $objectId, DataObjectInterface $dataObject): Result
+    {
+        return new Result([
+            'test' => 'ok'
+        ]);
+    }
 }

@@ -17,6 +17,7 @@
     "eoneopay/utils": "dev-master",
     "illuminate/console": "^5.5",
     "laravel/lumen-framework": "^5.5",
+    "loyaltycorp/search": "dev-master",
     "phpstan/phpstan": "^0.11.6",
     "phpstan/phpstan-phpunit": "^0.11.1",
     "phpstan/phpstan-strict-rules": "^0.11.0",
@@ -29,6 +30,7 @@
   "suggest": {
     "laravel/framework": "^5.5",
     "laravel/lumen-framework": "^5.5",
+    "loyaltycorp/search": "dev-master",
     "phpmd/phpmd": "Check coding best practices",
     "phpstan/phpstan": "Static analysis of code to detect potential errors",
     "phpunit/phpunit": "Run unit tests",

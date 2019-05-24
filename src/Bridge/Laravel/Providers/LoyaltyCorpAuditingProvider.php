@@ -6,16 +6,21 @@ namespace LoyaltyCorp\Auditing\Bridge\Laravel\Providers;
 use Illuminate\Support\ServiceProvider;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\LogUnindexedSearchItemCommand;
 use LoyaltyCorp\Auditing\Client\Connection;
+use LoyaltyCorp\Auditing\Client\SearchClient;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
 use LoyaltyCorp\Auditing\Services\LogWriter;
+use LoyaltyCorp\Auditing\Services\SearchLogWriter;
 use LoyaltyCorp\Auditing\Services\UuidGenerator;
+use LoyaltyCorp\Search\Interfaces\ClientInterface;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 
@@ -43,7 +48,7 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
                 \env('AWS_DYNAMODB_VERSION', 'latest')
             );
         });
-        $this->app->singleton(UuidFactoryInterface::class, UuidFactory::class);
+        $this->app->singleton(ClientInterface::class, SearchClient::class);
 
         // bind managers
         $this->app->singleton(DocumentManagerInterface::class, DocumentManager::class);
@@ -51,6 +56,8 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
 
         // bind services
         $this->app->singleton(LogWriterInterface::class, LogWriter::class);
+        $this->app->singleton(SearchLogWriterInterface::class, SearchLogWriter::class);
+        $this->app->singleton(UuidFactoryInterface::class, UuidFactory::class);
         $this->app->singleton(UuidGeneratorInterface::class, UuidGenerator::class);
 
         // register commands
@@ -64,12 +71,14 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
      */
     private function registerCommands(): void
     {
-        $this->app->singleton('command.create.auditschema', CreateSchemaCommand::class);
-        $this->app->singleton('command.drop.auditschema', DropSchemaCommand::class);
+        $this->app->singleton('command.create.audit.schema', CreateSchemaCommand::class);
+        $this->app->singleton('command.drop.audit.schema', DropSchemaCommand::class);
+        $this->app->singleton('command.log.audit.search_items', LogUnindexedSearchItemCommand::class);
 
         $this->commands([
-            'command.create.auditschema',
-            'command.drop.auditschema'
+            'command.create.audit.schema',
+            'command.drop.audit.schema',
+            'command.log.audit.search_items'
         ]);
     }
 }

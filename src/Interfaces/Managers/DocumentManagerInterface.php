@@ -11,7 +11,7 @@ interface DocumentManagerInterface
     /**
      * Create document item to the database.
      *
-     * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject
+     * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject Data transfer object
      *
      * @return \Aws\Result
      */
@@ -31,4 +31,14 @@ interface DocumentManagerInterface
         ?string $expression = null,
         ?array $attributeValues = null
     ): array;
+
+    /**
+     * Update document item.
+     *
+     * @param string $objectId Document object id
+     * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject Data transfer object
+     *
+     * @return \Aws\Result
+     */
+    public function update(string $objectId, DataObjectInterface $dataObject): Result;
 }

@@ -66,7 +66,7 @@ class TestCase extends BaseTestCae
      * @param string $commandClass Command class
      * @param \Symfony\Component\Console\Output\OutputInterface $output The interface to output the result to
      *
-     * @return \LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand
+     * @return \Illuminate\Console\Command
      *
      * @throws \ReflectionException If class being reflected does not exist
      */

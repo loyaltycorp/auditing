@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Services;
 
+use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Services\LogWriter;
-use Tests\LoyaltyCorp\Auditing\Stubs\DtoStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Managers\DocumentManagerStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
@@ -27,9 +27,8 @@ class LogWriterTest extends TestCase
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
             'occurredAt' => (new \DateTime())->format('Y-m-d H:i:s'),
-            'requestData' => '{"status": "ok"}',
-            'responseData' => '{"send": "me"}'
-
+            'requestData' => '{"send": "me"}',
+            'responseData' => '{"status": "ok"}'
         ]])->listByLineStatus(1);
 
         self::assertCount(1, $result);
@@ -39,10 +38,38 @@ class LogWriterTest extends TestCase
      * Test write log successfully.
      *
      * @return void
+     *
+     * @throws \Exception
      */
     public function testWriteSuccessfully(): void
     {
-        $this->getService()->write(new DtoStub());
+        $this->getService()->write(new LogLine(
+            '127.0.01',
+            1,
+            new \DateTime(),
+            '{"send": "me"}',
+            '{"status": "ok"}'
+        ));
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Test update log data successfully.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function testUpdateSuccessfully(): void
+    {
+        $this->getService()->update('request-id', new LogLine(
+            '127.0.01',
+            1,
+            new \DateTime(),
+            '{"send": "me"}',
+            '{"status": "ok"}'
+        ));
 
         $this->addToAssertionCount(1);
     }

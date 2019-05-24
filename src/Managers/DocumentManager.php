@@ -78,13 +78,33 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
                 )
             ]);
 
-            for ($i = 0; $i < $result->count(); $i++) {
-                $items[] = $this->getMarshaler()->unmarshalItem($result->get('Items')[$i]);
+            $marshaledItems = $result->get('Items');
+
+            foreach ($marshaledItems as $item) {
+                $items[] = $this->getMarshaler()->unmarshalItem($item);
             }
 
             return $items;
         } catch (DynamoDbException $exception) {
             throw new DocumentQueryFailedException('Failed to query document.', null, $exception);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(string $objectId, DataObjectInterface $dataObject): Result
+    {
+        $data = \array_merge($dataObject->toArray(), [
+            'requestId' => $objectId
+        ]);
+
+        $item = $this->getMarshaler()->marshalJson(\json_encode($data) ?: '');
+
+        return $this->getDbClient()->putItem([
+            self::TABLE_NAME_KEY => $dataObject->getTableName(),
+            self::TABLE_ITEM_KEY => $item,
+            self::CONDITION_EXPRESSION_KEY => 'attribute_exists (requestId)'
+        ]);
     }
 }

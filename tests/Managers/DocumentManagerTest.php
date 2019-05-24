@@ -102,6 +102,20 @@ class DocumentManagerTest extends TestCase
     }
 
     /**
+     * Test update document successfully.
+     *
+     * @return void
+     */
+    public function testUpdateSuccessfully(): void
+    {
+        $result = $this->getDocumentManager([
+            'test' => 'ok'
+        ])->update('request-id', new DtoStub());
+
+        self::assertSame('ok', $result->get('test'));
+    }
+
+    /**
      * Get document manager.
      *
      * @param mixed[]|null $data
