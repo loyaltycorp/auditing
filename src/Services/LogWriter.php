@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Services;
 
-use DateTime;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Documents\AuditLog;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;

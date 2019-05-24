@@ -61,8 +61,9 @@ class DropSchemaCommandTest extends TestCase
             $confirmYes
         );
 
-        // Run the command
-        $this->createCommandInstance(DropSchemaCommand::class, $output)->handle(new SchemaManagerStub());
+        /** @var \LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand $command */
+        $command = $this->createCommandInstance(DropSchemaCommand::class, $output);
+        $command->handle(new SchemaManagerStub());
 
         return $output->fetch();
     }

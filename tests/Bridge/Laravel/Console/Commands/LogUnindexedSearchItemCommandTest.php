@@ -37,11 +37,9 @@ class LogUnindexedSearchItemCommandTest extends TestCase
     {
         $output = new BufferedOutput();
 
-        // Run the command
-        $this->createCommandInstance(LogUnindexedSearchItemCommand::class, $output)->handle(
-            new LogWriterStub(),
-            new SearchLogWriterStub()
-        );
+        /** @var \LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\LogUnindexedSearchItemCommand $command */
+        $command = $this->createCommandInstance(LogUnindexedSearchItemCommand::class, $output);
+        $command->handle(new LogWriterStub(), new SearchLogWriterStub());
 
         return $output->fetch();
     }
