@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares;
 
 use Closure;
+use EoneoPay\Utils\DateTime;
 use Illuminate\Http\Request;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
@@ -13,6 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 class AuditMiddleware
 {
     /**
+     * @var \LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface
+     */
+    private $httpLogger;
+
+    /**
      * @var \Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface
      */
     private $psr7Factory;
@@ -20,10 +27,14 @@ class AuditMiddleware
     /**
      * AuditMiddleware constructor.
      *
+     * @param \LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface $httpLogger
      * @param \Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface $psr7Factory
      */
-    public function __construct(HttpMessageFactoryInterface $psr7Factory)
-    {
+    public function __construct(
+        HttpLoggerInterface $httpLogger,
+        HttpMessageFactoryInterface $psr7Factory
+    ) {
+        $this->httpLogger = $httpLogger;
         $this->psr7Factory = $psr7Factory;
     }
 
@@ -34,9 +45,12 @@ class AuditMiddleware
      * @param \Closure $next
      *
      * @return mixed
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
     public function handle(Request $request, Closure $next)
     {
+        $datetime = new DateTime();
         try {
             $response = $next($request);
         } catch (\Exception $exception) {
@@ -56,6 +70,12 @@ class AuditMiddleware
         }
 
         // TODO: space to plug in service (PYMT-713) and use $psrRequest and $psrResponse
+        $this->httpLogger->record(
+            $request->ip() ?? '',
+            $datetime,
+            $psrRequest,
+            $psrResponse
+        );
 
         return $response;
     }
