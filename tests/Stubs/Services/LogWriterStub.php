@@ -12,10 +12,16 @@ use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 class LogWriterStub implements LogWriterInterface
 {
     /**
+     * @var \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface[]
+     */
+    public $writtenDtos = [];
+
+    /**
      * {@inheritdoc}
      */
     public function write(LogLine $dataObject): void
     {
+        $this->writtenDtos[] = $dataObject;
     }
 
     /**

@@ -15,6 +15,41 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
 class LogLineTest extends TestCase
 {
     /**
+     * Test the DTO to ensure serialization is possible, and it keeps required properties
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function testDeserialization(): void
+    {
+        $logLine = new LogLine(
+            '127.0.0.1',
+            0,
+            new DateTime('2019-05-01T12:12:12'),
+            '{"data":"some good content"}',
+            '{"data":"even better content"}'
+        );
+
+        $serialized = \serialize($logLine);
+        $unserialized = \unserialize($serialized);
+
+        self::assertEquals($logLine, $unserialized);
+    }
+
+    /**
+     * Test getTableName() method
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function testGetTableName(): void
+    {
+        self::assertSame('AuditLog', $this->getInstance()->getTableName());
+    }
+
+    /**
      * Test getters
      *
      * @return void
@@ -50,18 +85,6 @@ class LogLineTest extends TestCase
             ],
             $this->getInstance()->toArray()
         );
-    }
-
-    /**
-     * Test getTableName() method
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
-    public function testGetTableName(): void
-    {
-        self::assertSame('AuditLog', $this->getInstance()->getTableName());
     }
 
     /**
