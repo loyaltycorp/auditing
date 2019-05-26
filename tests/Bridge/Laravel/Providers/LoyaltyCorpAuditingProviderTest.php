@@ -5,14 +5,18 @@ namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Providers;
 
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use LoyaltyCorp\Auditing\Services\LogLineFactory;
 use LoyaltyCorp\Auditing\Services\LogWriter;
 use LoyaltyCorp\Auditing\Services\UuidGenerator;
 use Tests\LoyaltyCorp\Auditing\TestCase;
@@ -30,6 +34,8 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
      * Test bindings
      *
      * @return void
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function testServiceProviderBindings(): void
     {
@@ -43,6 +49,8 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
         // services
         self::assertInstanceOf(LogWriter::class, $app->make(LogWriterInterface::class));
         self::assertInstanceOf(UuidGenerator::class, $app->make(UuidGeneratorInterface::class));
+        self::assertInstanceOf(HttpLoggerInterface::class, $app->make(HttpLogger::class));
+        self::assertInstanceOf(LogLineFactoryInterface::class, $app->make(LogLineFactory::class));
         // commands
         self::assertInstanceOf(CreateSchemaCommand::class, $app->make('command.create.auditschema'));
         self::assertInstanceOf(DropSchemaCommand::class, $app->make('command.drop.auditschema'));
