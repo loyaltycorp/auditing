@@ -5,7 +5,6 @@ namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares;
 
 use EoneoPay\Externals\Logger\Logger;
 use EoneoPay\Utils\DateTime;
-use Exception;
 use Illuminate\Http\Request;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
@@ -123,6 +122,8 @@ class AuditMiddlewareTest extends TestCase
      * continues to generate psr7 request/response
      *
      * @return void
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
     public function testProcessingContinuesWhenExceptionIsThrownInOriginalProcess(): void
     {
@@ -136,7 +137,7 @@ class AuditMiddlewareTest extends TestCase
                     throw new InvalidDocumentClassException('Something failed.');
                 }
             );
-        } catch (Exception $exception) {
+        } catch (InvalidDocumentClassException $exception) {
             // catching exception so we can assert the the process continues to send data to http logger
         }
 
@@ -221,24 +222,6 @@ class AuditMiddlewareTest extends TestCase
     }
 
     /**
-     * Get symfony request
-     *
-     * @return \Illuminate\Http\Request
-     */
-    private function getRequest(): Request
-    {
-        return new Request(
-            ['query' => 'value'],
-            ['request' => 'value'],
-            [],
-            [],
-            [],
-            ['HTTP_HOST' => 'loyaltycorp.com.au', 'REMOTE_ADDR' => '127.0.0.1'],
-            'Content'
-        );
-    }
-
-    /**
      * Get instance of middleware
      *
      * @param \LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface|null $httpLogger
@@ -254,6 +237,24 @@ class AuditMiddlewareTest extends TestCase
             $httpLogger ?? new HttpLoggerStub(),
             new Logger(null, $logHandlerStub ?? new LogHandlerStub()),
             new Psr7Factory()
+        );
+    }
+
+    /**
+     * Get symfony request
+     *
+     * @return \Illuminate\Http\Request
+     */
+    private function getRequest(): Request
+    {
+        return new Request(
+            ['query' => 'value'],
+            ['request' => 'value'],
+            [],
+            [],
+            [],
+            ['HTTP_HOST' => 'loyaltycorp.com.au', 'REMOTE_ADDR' => '127.0.0.1'],
+            'Content'
         );
     }
 }
