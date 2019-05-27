@@ -115,6 +115,7 @@ class AuditMiddlewareTest extends TestCase
         self::assertCount(1, $logHandler->getLogs());
         $log = $logHandler->getLogs()[0];
         self::assertArrayHasKey('message', $log);
+        self::assertSame('Exception caught: This is a test exception', $log['message']);
     }
 
     /**
@@ -168,6 +169,7 @@ class AuditMiddlewareTest extends TestCase
         self::assertCount(1, $logHandler->getLogs());
         $log = $logHandler->getLogs()[0];
         self::assertArrayHasKey('message', $log);
+        self::assertSame('Exception caught: The source URI string appears to be malformed', $log['message']);
     }
 
     /**
@@ -193,6 +195,10 @@ class AuditMiddlewareTest extends TestCase
         self::assertCount(1, $logHandler->getLogs());
         $log = $logHandler->getLogs()[0];
         self::assertArrayHasKey('message', $log);
+        self::assertSame(
+            'Exception caught: Invalid status code "1"; must be an integer between 100 and 599, inclusive',
+            $log['message']
+        );
     }
 
     /**
