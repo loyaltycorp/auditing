@@ -9,6 +9,9 @@ use EoneoPay\Externals\Environment\Loader;
 use EoneoPay\Externals\Logger\Logger;
 use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Providers\LoyaltyCorpAuditingProvider;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Providers\LoyaltyCorpAuditingSearchProvider;
+use LoyaltyCorp\Search\Interfaces\ClientInterface;
+use Tests\LoyaltyCorp\Auditing\Stubs\Client\SearchClientStub;
 
 // Load env.php or .env if it exists
 try {
@@ -43,5 +46,19 @@ $app = new Application($basePath ?: '');
 */
 
 $app->register(LoyaltyCorpAuditingProvider::class);
+$app->register(LoyaltyCorpAuditingSearchProvider::class);
+
+/*
+|--------------------------------------------------------------------------
+| Register Container Bindings
+|--------------------------------------------------------------------------
+|
+| Now we will register a few bindings in the service container. We will
+| register the exception handler and the console kernel. You may add
+| your own bindings here if you like or you can make another file.
+|
+*/
+
+$app->singleton(ClientInterface::class, SearchClientStub::class);
 
 return $app;

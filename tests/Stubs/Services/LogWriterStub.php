@@ -19,14 +19,6 @@ class LogWriterStub implements LogWriterInterface
     /**
      * {@inheritdoc}
      */
-    public function write(LogLine $dataObject): void
-    {
-        $this->writtenDtos[] = $dataObject;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function listByLineStatus(int $lineStatus): array
     {
         return [[
@@ -45,5 +37,13 @@ class LogWriterStub implements LogWriterInterface
      */
     public function update(string $requestId, LogLine $dataObject): void
     {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(LogLine $dataObject): void
+    {
+        $this->writtenDtos[] = $dataObject;
     }
 }

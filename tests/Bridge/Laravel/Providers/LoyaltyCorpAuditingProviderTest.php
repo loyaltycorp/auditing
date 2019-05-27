@@ -5,11 +5,9 @@ namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Providers;
 
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
-use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\LogUnindexedSearchItemCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Client\Connection;
-use LoyaltyCorp\Auditing\Client\SearchClient;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
@@ -23,7 +21,6 @@ use LoyaltyCorp\Auditing\Services\LogLineFactory;
 use LoyaltyCorp\Auditing\Services\LogWriter;
 use LoyaltyCorp\Auditing\Services\SearchLogWriter;
 use LoyaltyCorp\Auditing\Services\UuidGenerator;
-use LoyaltyCorp\Search\Interfaces\ClientInterface;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 use Tests\LoyaltyCorp\Auditing\TestCase;
@@ -41,8 +38,6 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
      * Test bindings
      *
      * @return void
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function testServiceProviderBindings(): void
     {
@@ -50,7 +45,6 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
 
         // clients
         self::assertInstanceOf(Connection::class, $app->make(ConnectionInterface::class));
-        self::assertInstanceOf(SearchClient::class, $app->make(ClientInterface::class));
         // managers
         self::assertInstanceOf(DocumentManager::class, $app->make(DocumentManagerInterface::class));
         self::assertInstanceOf(SchemaManager::class, $app->make(SchemaManagerInterface::class));
@@ -64,6 +58,5 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
         // commands
         self::assertInstanceOf(CreateSchemaCommand::class, $app->make('command.create.audit.schema'));
         self::assertInstanceOf(DropSchemaCommand::class, $app->make('command.drop.audit.schema'));
-        self::assertInstanceOf(LogUnindexedSearchItemCommand::class, $app->make('command.log.audit.search_items'));
     }
 }
