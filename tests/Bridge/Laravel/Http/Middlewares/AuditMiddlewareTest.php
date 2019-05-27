@@ -114,9 +114,8 @@ class AuditMiddlewareTest extends TestCase
         );
 
         self::assertCount(1, $logHandler->getLogs());
-        foreach ($logHandler->getLogs() as $log) {
-            self::assertArrayHasKey('message', $log);
-        }
+        $log = $logHandler->getLogs()[0];
+        self::assertArrayHasKey('message', $log);
     }
 
     /**
@@ -166,9 +165,8 @@ class AuditMiddlewareTest extends TestCase
         );
 
         self::assertCount(1, $logHandler->getLogs());
-        foreach ($logHandler->getLogs() as $log) {
-            self::assertArrayHasKey('message', $log);
-        }
+        $log = $logHandler->getLogs()[0];
+        self::assertArrayHasKey('message', $log);
     }
 
     /**
@@ -192,9 +190,8 @@ class AuditMiddlewareTest extends TestCase
         );
 
         self::assertCount(1, $logHandler->getLogs());
-        foreach ($logHandler->getLogs() as $log) {
-            self::assertArrayHasKey('message', $log);
-        }
+        $log = $logHandler->getLogs()[0];
+        self::assertArrayHasKey('message', $log);
     }
 
     /**
