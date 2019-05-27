@@ -137,10 +137,11 @@ class AuditMiddleware
         $psrRequest = null;
         try {
             $psrRequest = $this->psr7Factory->createRequest($request);
-            return $psrRequest;
         } catch (Exception $exception) {
             $this->logger->exception($exception);
         }
+
+        return $psrRequest;
     }
 
     /**
@@ -156,9 +157,10 @@ class AuditMiddleware
 
         try {
             $psrResponse = $this->psr7Factory->createResponse($response);
-            return $psrResponse;
         } catch (Exception $exception) {
             $this->logger->exception($exception);
         }
+
+        return $psrResponse;
     }
 }
