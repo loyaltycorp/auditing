@@ -36,7 +36,6 @@ final class SearchLogWriter implements SearchLogWriterInterface
             $documents[$logLine['requestId']] = $logLine;
         }
 
-        // @todo: obtain index name?
-        $this->searchClient->bulkUpdate('indexName', $documents);
+        $this->searchClient->bulkUpdate('http-requests', $documents);
     }
 }
