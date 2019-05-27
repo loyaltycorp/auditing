@@ -9,7 +9,9 @@
     "ext-json": "*",
     "aws/aws-sdk-php": "^3.93",
     "guzzlehttp/guzzle": "^6.3",
-    "ramsey/uuid": "^3.8"
+    "ramsey/uuid": "^3.8",
+    "symfony/psr-http-message-bridge": "^1.2",
+    "zendframework/zend-diactoros": "^2.1"
   },
   "require-dev": {
     "eoneopay/externals": "^v1.0@rc",
