@@ -65,10 +65,11 @@ class AuditMiddleware
     {
         $datetime = new DateTime();
         $originalException = null;
+        $response = null;
+
         try {
             $response = $next($request);
         } catch (Exception $exception) {
-            $response = null;
             $originalException = $exception;
         }
 
