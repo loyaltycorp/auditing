@@ -71,6 +71,28 @@ class AuditMiddlewareTest extends TestCase
     }
 
     /**
+     * Test handling of a response which is not instance of Response or ResponseInterface
+     *
+     * @return void
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
+     */
+    public function testHandleResponseWhenItsNotKnownType(): void
+    {
+        $httpLogger = new HttpLoggerStub();
+        $middleware = $this->getMiddleware($httpLogger);
+
+        $middleware->handle(
+            $this->getRequest(),
+            static function (): string {
+                return '{"json": "ok"}';
+            }
+        );
+
+        self::assertNull($httpLogger->getResponse());
+    }
+
+    /**
      * Test if handle can intercept response which is already in PSR7 format
      *
      * @return void
