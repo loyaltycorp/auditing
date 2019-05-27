@@ -36,7 +36,7 @@ class AuditMiddlewareTest extends TestCase
      */
     public function testHandle(): void
     {
-        $middleware = $this->initiate();
+        $middleware = $this->getMiddleware();
 
         $response = $middleware->handle(
             $this->getRequest(),
@@ -61,7 +61,7 @@ class AuditMiddlewareTest extends TestCase
         $this->expectException(InvalidDocumentClassException::class);
         $this->expectExceptionMessage('Something failed.');
 
-        $middleware = $this->initiate();
+        $middleware = $this->getMiddleware();
 
         $middleware->handle(
             $this->getRequest(),
@@ -80,7 +80,7 @@ class AuditMiddlewareTest extends TestCase
      */
     public function testHandleWhenResponseFromControllerIsAlreadyPsr7(): void
     {
-        $middleware = $this->initiate();
+        $middleware = $this->getMiddleware();
 
         $response = $middleware->handle(
             $this->getRequest(),
@@ -104,7 +104,7 @@ class AuditMiddlewareTest extends TestCase
     {
         $httpLogger = new HttpLoggerExceptionStub(); // this stub specifically throws an exception
         $logHandler = new LogHandlerStub();
-        $middleware = $this->initiate($httpLogger, $logHandler);
+        $middleware = $this->getMiddleware($httpLogger, $logHandler);
 
         $middleware->handle(
             $this->getRequest(),
@@ -127,7 +127,7 @@ class AuditMiddlewareTest extends TestCase
     public function testProcessingContinuesWhenExceptionIsThrownInOriginalProcess(): void
     {
         $httpLogger = new HttpLoggerStub();
-        $middleware = $this->initiate($httpLogger);
+        $middleware = $this->getMiddleware($httpLogger);
 
         try {
             $middleware->handle(
@@ -155,7 +155,7 @@ class AuditMiddlewareTest extends TestCase
     public function testPsrRequestExceptionsAreLoggedByLoggerInterface(): void
     {
         $logHandler = new LogHandlerStub();
-        $middleware = $this->initiate(null, $logHandler);
+        $middleware = $this->getMiddleware(null, $logHandler);
 
         $middleware->handle(
             new Request(), // this will throw an exception while trying to create psr7 request as HOST is missing
@@ -179,7 +179,7 @@ class AuditMiddlewareTest extends TestCase
     public function testPsrResponseExceptionsAreLoggedByLoggerInterface(): void
     {
         $logHandler = new LogHandlerStub();
-        $middleware = $this->initiate(null, $logHandler);
+        $middleware = $this->getMiddleware(null, $logHandler);
 
         $middleware->handle(
             $this->getRequest(),
@@ -204,7 +204,7 @@ class AuditMiddlewareTest extends TestCase
     public function testValidDataIsPassedToHttpLogger(): void
     {
         $httpLogger = new HttpLoggerStub();
-        $middleware = $this->initiate($httpLogger);
+        $middleware = $this->getMiddleware($httpLogger);
 
         $middleware->handle(
             $this->getRequest(),
@@ -246,7 +246,7 @@ class AuditMiddlewareTest extends TestCase
      *
      * @return \LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware
      */
-    private function initiate(
+    private function getMiddleware(
         ?HttpLoggerInterface $httpLogger = null,
         ?LogHandlerStub $logHandlerStub = null
     ): AuditMiddleware {

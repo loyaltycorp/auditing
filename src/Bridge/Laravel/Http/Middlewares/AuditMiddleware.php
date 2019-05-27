@@ -73,19 +73,7 @@ class AuditMiddleware
             $originalException = $exception;
         }
 
-        $psrRequest = $this->createPsr7Request($request);
-
-        $psrResponse = null;
-        if (($response instanceof Response) === true) {
-            $psrResponse = $this->createPsr7Response($response);
-        }
-
-        // if response is already an instance of psr7
-        if (($response instanceof ResponseInterface) === true) {
-            $psrResponse = $response;
-        }
-
-        $this->callHttpLogger($datetime, $request->ip() ?? '', $psrRequest, $psrResponse);
+        $this->processForLogging($datetime, $request, $response);
 
         // if there has been a original exception in the $next, throw it again here
         if (($originalException instanceof Exception) === true) {
@@ -162,5 +150,32 @@ class AuditMiddleware
         }
 
         return $psrResponse;
+    }
+
+    /**
+     * @param \EoneoPay\Utils\DateTime $dateTime
+     * @param \Illuminate\Http\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response|\Psr\Http\Message\ResponseInterface|null $response
+     *
+     * @return void
+     */
+    private function processForLogging(
+        DateTime $dateTime,
+        Request $request,
+        $response = null
+    ): void {
+        $psrRequest = $this->createPsr7Request($request);
+
+        $psrResponse = null;
+        if (($response instanceof Response) === true) {
+            $psrResponse = $this->createPsr7Response($response);
+        }
+
+        // if response is already an instance of psr7
+        if (($response instanceof ResponseInterface) === true) {
+            $psrResponse = $response;
+        }
+
+        $this->callHttpLogger($dateTime, $request->ip() ?? '', $psrRequest, $psrResponse);
     }
 }
