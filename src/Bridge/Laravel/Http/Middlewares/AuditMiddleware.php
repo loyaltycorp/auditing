@@ -135,14 +135,12 @@ class AuditMiddleware
     private function createPsr7Request(Request $request): ?ServerRequestInterface
     {
         $psrRequest = null;
-        $psrRequestException = null;
         try {
             $psrRequest = $this->psr7Factory->createRequest($request);
+            return $psrRequest;
         } catch (Exception $exception) {
             $this->logger->exception($exception);
         }
-
-        return $psrRequest;
     }
 
     /**
@@ -155,14 +153,12 @@ class AuditMiddleware
     private function createPsr7Response(Response $response): ?ResponseInterface
     {
         $psrResponse = null;
-        $psrResponseException = null;
 
         try {
             $psrResponse = $this->psr7Factory->createResponse($response);
+            return $psrResponse;
         } catch (Exception $exception) {
             $this->logger->exception($exception);
         }
-
-        return $psrResponse;
     }
 }
