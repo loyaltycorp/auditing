@@ -14,17 +14,17 @@ use Psr\Http\Message\ResponseInterface;
 class HttpLoggerStub implements HttpLoggerInterface
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $ipAddress;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     private $now;
 
     /**
-     * @var \Psr\Http\Message\RequestInterface
+     * @var \Psr\Http\Message\RequestInterface|null
      */
     private $request;
 
@@ -50,30 +50,38 @@ class HttpLoggerStub implements HttpLoggerInterface
     }
 
     /**
-     * @return string
+     * Get IP address that was passed to the logger
+     *
+     * @return string|null
      */
-    public function getIpAddress(): string
+    public function getIpAddress(): ?string
     {
         return $this->ipAddress;
     }
 
     /**
-     * @return \DateTime
+     * Get datetime that was passed to the logger
+     *
+     * @return \DateTime|null
      */
-    public function getNow(): \DateTime
+    public function getNow(): ?DateTime
     {
         return $this->now;
     }
 
     /**
-     * @return \Psr\Http\Message\RequestInterface
+     * Get PSR request that was passed to the logger
+     *
+     * @return \Psr\Http\Message\RequestInterface|null
      */
-    public function getRequest(): RequestInterface
+    public function getRequest(): ?RequestInterface
     {
         return $this->request;
     }
 
     /**
+     * Get PSR7 response that was passed to the logger
+     *
      * @return \Psr\Http\Message\ResponseInterface|null
      */
     public function getResponse(): ?ResponseInterface
