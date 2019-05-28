@@ -23,6 +23,8 @@ use Zend\Diactoros\Response\TextResponse;
 
 /**
  * @covers \LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Requires many classes for full testing
  */
 class AuditMiddlewareTest extends TestCase
 {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares;
 
 use Closure;
-use DateTime as BaseDateTime;
 use EoneoPay\Externals\Logger\Interfaces\LoggerInterface;
 use EoneoPay\Utils\DateTime;
 use Exception;
@@ -12,7 +11,6 @@ use Illuminate\Http\Request;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -86,23 +84,23 @@ class AuditMiddleware
     /**
      * Call the HttpLoggerInterface to log psr request and response
      *
-     * @param \DateTime $datetime
-     * @param string $ip
+     * @param \EoneoPay\Utils\DateTime $datetime
+     * @param string $ipAddress
      * @param \Psr\Http\Message\RequestInterface|null $psrRequest
      * @param \Psr\Http\Message\ResponseInterface|null $psrResponse
      *
      * @return void
      */
     private function callHttpLogger(
-        BaseDateTime $datetime,
-        string $ip,
+        DateTime $datetime,
+        string $ipAddress,
         ?RequestInterface $psrRequest,
         ?ResponseInterface $psrResponse = null
     ): void {
         try {
             if (($psrRequest instanceof RequestInterface) === true) {
                 $this->httpLogger->record(
-                    $ip,
+                    $ipAddress,
                     $datetime,
                     $psrRequest,
                     $psrResponse
@@ -118,9 +116,9 @@ class AuditMiddleware
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Psr\Http\Message\ServerRequestInterface|null
+     * @return \Psr\Http\Message\RequestInterface|null
      */
-    private function createPsr7Request(Request $request): ?ServerRequestInterface
+    private function createPsr7Request(Request $request): ?RequestInterface
     {
         $psrRequest = null;
         try {
