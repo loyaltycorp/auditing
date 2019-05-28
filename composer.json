@@ -20,6 +20,7 @@
     "illuminate/console": "^5.5",
     "laravel/lumen-framework": "^5.5",
     "loyaltycorp/search": "dev-master",
+    "phpmd/phpmd": "^2.6",
     "phpstan/phpstan": "^0.11.6",
     "phpstan/phpstan-phpunit": "^0.11.1",
     "phpstan/phpstan-strict-rules": "^0.11.0",
