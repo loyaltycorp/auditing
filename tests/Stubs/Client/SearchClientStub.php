@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Client;
 
-use LoyaltyCorp\Auditing\Client\SearchClient;
+use LoyaltyCorp\Search\Interfaces\ClientInterface;
 
 /**
  * @coversNothing
  */
-class SearchClientStub extends SearchClient
+class SearchClientStub implements ClientInterface
 {
     /**
      * {@inheritdoc}

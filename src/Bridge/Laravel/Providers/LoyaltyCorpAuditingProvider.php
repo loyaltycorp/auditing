@@ -10,11 +10,13 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
+use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
+use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
 use LoyaltyCorp\Auditing\Services\LogLineFactory;
@@ -50,6 +52,7 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
 
         // bind managers
         $this->app->singleton(DocumentManagerInterface::class, DocumentManager::class);
+        $this->app->singleton(ManagerInterface::class, Manager::class);
         $this->app->singleton(SchemaManagerInterface::class, SchemaManager::class);
 
         // bind services

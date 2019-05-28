@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Managers;
 
-use Aws\Result;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\ResponseInterface;
+use LoyaltyCorp\Auditing\Response;
 
 /**
  * @coversNothing
@@ -32,9 +33,9 @@ class DocumentManagerStub implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function create(DataObjectInterface $dataObject): Result
+    public function create(DataObjectInterface $dataObject): ResponseInterface
     {
-        return new Result([
+        return new Response([
             'test' => 'ok'
         ]);
     }
@@ -50,9 +51,9 @@ class DocumentManagerStub implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function update(string $objectId, DataObjectInterface $dataObject): Result
+    public function update(string $objectId, DataObjectInterface $dataObject): ResponseInterface
     {
-        return new Result([
+        return new Response([
             'test' => 'ok'
         ]);
     }

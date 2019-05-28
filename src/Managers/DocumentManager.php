@@ -8,29 +8,49 @@ use Aws\Result;
 use LoyaltyCorp\Auditing\Exceptions\DocumentCreateFailedException;
 use LoyaltyCorp\Auditing\Exceptions\DocumentQueryFailedException;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
+use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
+use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
-use LoyaltyCorp\Auditing\Manager;
+use LoyaltyCorp\Auditing\Interfaces\ResponseInterface;
+use LoyaltyCorp\Auditing\Response;
 
-final class DocumentManager extends Manager implements DocumentManagerInterface
+final class DocumentManager implements DocumentManagerInterface, DynamoDbAwareInterface
 {
+    /**
+     * Manager instance.
+     *
+     * @var \LoyaltyCorp\Auditing\Interfaces\ManagerInterface
+     */
+    private $manager;
+
+    /**
+     * Construct document manager.
+     *
+     * @param \LoyaltyCorp\Auditing\Interfaces\ManagerInterface $manager
+     */
+    public function __construct(ManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function create(DataObjectInterface $dataObject): Result
+    public function create(DataObjectInterface $dataObject): ResponseInterface
     {
         $attemptCounter = 0;
         $result = null;
 
         do {
             $data = \array_merge($dataObject->toArray(), [
-                'requestId' => $this->getGenerator()->uuid4()
+                'requestId' => $this->manager->getGenerator()->uuid4()
             ]);
 
-            $item = $this->getMarshaler()->marshalJson(\json_encode($data) ?: '');
+            $item = $this->manager->getMarshaler()->marshalJson(\json_encode($data) ?: '');
 
             try {
                 $attemptCounter++;
-                $result = $this->getDbClient()->putItem([
+                $result = $this->manager->getDbClient()->putItem([
                     self::TABLE_NAME_KEY => $dataObject->getTableName(),
                     self::TABLE_ITEM_KEY => $item,
                     self::CONDITION_EXPRESSION_KEY => 'attribute_not_exists (requestId)'
@@ -55,7 +75,12 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
             throw new DocumentCreateFailedException('Unable to find available request ID for the document.');
         }
 
-        return $result;
+        /**
+         * @var \Aws\Result $result
+         *
+         * @see https://youtrack.jetbrains.com/issue/WI-37859 - typehint required until PhpStorm recognises === check
+         */
+        return new Response($result->toArray()['Items'] ?? []);
     }
 
     /**
@@ -67,13 +92,13 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
         ?array $attributeValues = null
     ): array {
         $items = [];
-        $document = $this->getDocumentObject($documentClass);
+        $document = $this->manager->getDocumentObject($documentClass);
 
         try {
-            $result = $this->getDbClient()->scan([
+            $result = $this->manager->getDbClient()->scan([
                 self::TABLE_NAME_KEY => $document->getTableName(),
                 'FilterExpression' => $expression ?? '',
-                'ExpressionAttributeValues' => $this->getMarshaler()->marshalJson(
+                'ExpressionAttributeValues' => $this->manager->getMarshaler()->marshalJson(
                     \json_encode($attributeValues ?? []) ?: ''
                 )
             ]);
@@ -81,7 +106,7 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
             $marshaledItems = $result->get('Items');
 
             foreach ($marshaledItems as $item) {
-                $items[] = $this->getMarshaler()->unmarshalItem($item);
+                $items[] = $this->manager->getMarshaler()->unmarshalItem($item);
             }
 
             return $items;
@@ -93,18 +118,20 @@ final class DocumentManager extends Manager implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function update(string $objectId, DataObjectInterface $dataObject): Result
+    public function update(string $objectId, DataObjectInterface $dataObject): ResponseInterface
     {
         $data = \array_merge($dataObject->toArray(), [
             'requestId' => $objectId
         ]);
 
-        $item = $this->getMarshaler()->marshalJson(\json_encode($data) ?: '');
+        $item = $this->manager->getMarshaler()->marshalJson(\json_encode($data) ?: '');
 
-        return $this->getDbClient()->putItem([
+        $result =  $this->manager->getDbClient()->putItem([
             self::TABLE_NAME_KEY => $dataObject->getTableName(),
             self::TABLE_ITEM_KEY => $item,
             self::CONDITION_EXPRESSION_KEY => 'attribute_exists (requestId)'
         ]);
+
+        return new Response($result->toArray()['Items'] ?? []);
     }
 }

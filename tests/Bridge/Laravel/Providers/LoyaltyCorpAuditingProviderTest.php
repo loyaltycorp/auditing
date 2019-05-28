@@ -9,12 +9,14 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Client\Connection;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
+use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
+use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
 use LoyaltyCorp\Auditing\Services\LogLineFactory;
@@ -43,10 +45,13 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
     {
         $app = $this->createApplication();
 
+        // assert that there are bound items
+        self::assertGreaterThan(0, $app->getBindings());
         // clients
         self::assertInstanceOf(Connection::class, $app->make(ConnectionInterface::class));
         // managers
         self::assertInstanceOf(DocumentManager::class, $app->make(DocumentManagerInterface::class));
+        self::assertInstanceOf(Manager::class, $app->make(ManagerInterface::class));
         self::assertInstanceOf(SchemaManager::class, $app->make(SchemaManagerInterface::class));
         // services
         self::assertInstanceOf(LogWriter::class, $app->make(LogWriterInterface::class));

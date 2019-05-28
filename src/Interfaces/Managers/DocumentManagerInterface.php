@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Interfaces\Managers;
 
-use Aws\Result;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
+use LoyaltyCorp\Auditing\Interfaces\ResponseInterface;
 
 interface DocumentManagerInterface
 {
@@ -13,9 +13,9 @@ interface DocumentManagerInterface
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject Data transfer object
      *
-     * @return \Aws\Result
+     * @return \LoyaltyCorp\Auditing\Interfaces\ResponseInterface
      */
-    public function create(DataObjectInterface $dataObject): Result;
+    public function create(DataObjectInterface $dataObject): ResponseInterface;
 
     /**
      * List document items by give expression.
@@ -38,7 +38,7 @@ interface DocumentManagerInterface
      * @param string $objectId Document object id
      * @param \LoyaltyCorp\Auditing\Interfaces\DataObjectInterface $dataObject Data transfer object
      *
-     * @return \Aws\Result
+     * @return \LoyaltyCorp\Auditing\Interfaces\ResponseInterface
      */
-    public function update(string $objectId, DataObjectInterface $dataObject): Result;
+    public function update(string $objectId, DataObjectInterface $dataObject): ResponseInterface;
 }

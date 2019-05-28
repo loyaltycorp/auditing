@@ -4,17 +4,35 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Managers;
 
 use LoyaltyCorp\Auditing\Interfaces\DocumentInterface;
+use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
+use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
-use LoyaltyCorp\Auditing\Manager;
 
-final class SchemaManager extends Manager implements SchemaManagerInterface
+final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterface
 {
+    /**
+     * Manager instance.
+     *
+     * @var \LoyaltyCorp\Auditing\Interfaces\ManagerInterface
+     */
+    private $manager;
+
+    /**
+     * Construct schema manager
+     *
+     * @param \LoyaltyCorp\Auditing\Interfaces\ManagerInterface $manager
+     */
+    public function __construct(ManagerInterface $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function create(DocumentInterface $entity): bool
     {
-        $this->getDbClient()->createTable($entity->toArray());
+        $this->manager->getDbClient()->createTable($entity->toArray());
 
         return true;
     }
@@ -24,9 +42,9 @@ final class SchemaManager extends Manager implements SchemaManagerInterface
      */
     public function drop(string $documentClass): bool
     {
-        $document = $this->getDocumentObject($documentClass);
+        $document = $this->manager->getDocumentObject($documentClass);
 
-        $this->getDbClient()->deleteTable([
+        $this->manager->getDbClient()->deleteTable([
             self::TABLE_NAME_KEY => $document->getTableName()
         ]);
 

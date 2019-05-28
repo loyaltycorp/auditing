@@ -37,14 +37,14 @@ final class LogUnindexedSearchItemCommand extends Command
     ): void {
         $this->info('Indexing log items for search...');
 
-        $lines = $logWriter->listByLineStatus(0);
+        $lines = $logWriter->listByLineStatus(LogLine::LINE_STATUS_NOT_INDEXED);
 
         $searchLogWriter->bulkWrite($lines);
 
         foreach ($lines as $line) {
             $logWriter->update($line['requestId'], new LogLine(
                 $line['clientIp'],
-                1,
+                LogLine::LINE_STATUS_INDEXED,
                 new \DateTime($line['occurredAt']),
                 $line['requestData'],
                 $line['responseData']
