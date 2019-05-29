@@ -37,6 +37,7 @@ class LogWriterStub implements LogWriterInterface
      */
     public function update(string $requestId, LogLine $dataObject): void
     {
+        $this->writtenDtos[] = $dataObject;
     }
 
     /**

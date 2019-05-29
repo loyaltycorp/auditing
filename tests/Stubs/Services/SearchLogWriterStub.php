@@ -11,9 +11,17 @@ use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
 class SearchLogWriterStub implements SearchLogWriterInterface
 {
     /**
+     * Written log lines.
+     *
+     * @var mixed[]
+     */
+    public $loggedLines = [];
+
+    /**
      * {@inheritdoc}
      */
     public function bulkWrite(array $logLines): void
     {
+        $this->loggedLines = $logLines;
     }
 }

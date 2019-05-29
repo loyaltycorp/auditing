@@ -18,7 +18,7 @@ class DocumentManagerStub implements DocumentManagerInterface
      *
      * @var mixed[]
      */
-    private $results;
+    public $results;
 
     /**
      * Construct DocumentManager stub
@@ -35,9 +35,9 @@ class DocumentManagerStub implements DocumentManagerInterface
      */
     public function create(DataObjectInterface $dataObject): ResponseInterface
     {
-        return new Response([
-            'test' => 'ok'
-        ]);
+        $this->results = $dataObject->toArray();
+
+        return new Response($this->results);
     }
 
     /**
@@ -53,8 +53,8 @@ class DocumentManagerStub implements DocumentManagerInterface
      */
     public function update(string $objectId, DataObjectInterface $dataObject): ResponseInterface
     {
-        return new Response([
-            'test' => 'ok'
-        ]);
+        $this->results = $dataObject->toArray();
+
+        return new Response($this->results);
     }
 }

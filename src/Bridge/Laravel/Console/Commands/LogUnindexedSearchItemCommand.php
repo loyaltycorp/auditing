@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Bus\Dispatcher as IlluminateDisptacher;
+use LoyaltyCorp\Auditing\Bridge\Laravel\Jobs\SearchLogWriterJob;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
-use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
 
 final class LogUnindexedSearchItemCommand extends Command
 {
@@ -24,33 +25,27 @@ final class LogUnindexedSearchItemCommand extends Command
     /**
      * Handle command.
      *
+     * @param \Illuminate\Contracts\Bus\Dispatcher $dispatcher
      * @param \LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface $logWriter
-     * @param \LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface $searchLogWriter
      *
      * @return void
      *
-     * @throws \Exception Exception from DateTime if any
+     * @throws \Exception
      */
-    public function handle(
-        LogWriterInterface $logWriter,
-        SearchLogWriterInterface $searchLogWriter
-    ): void {
-        $this->info('Indexing log items for search...');
-
+    public function handle(IlluminateDisptacher $dispatcher, LogWriterInterface $logWriter): void
+    {
         $lines = $logWriter->listByLineStatus(LogLine::LINE_STATUS_NOT_INDEXED);
 
-        $searchLogWriter->bulkWrite($lines);
-
         foreach ($lines as $line) {
-            $logWriter->update($line['requestId'], new LogLine(
+            $dispatcher->dispatch(new SearchLogWriterJob($line['requestId'], new LogLine(
                 $line['clientIp'],
-                LogLine::LINE_STATUS_INDEXED,
+                $line['lineStatus'],
                 new \DateTime($line['occurredAt']),
                 $line['requestData'],
                 $line['responseData']
-            ));
+            )));
         }
 
-        $this->info('Done.');
+        $this->info('Writing logs to search queued for processing.');
     }
 }
