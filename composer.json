@@ -5,18 +5,52 @@
   "license": "BSD-3-Clause",
   "minimum-stability": "stable",
   "require": {
+    "php": ">=7.1",
+    "ext-json": "*",
     "aws/aws-sdk-php": "^3.93",
-    "guzzlehttp/guzzle": "^6.3"
+    "guzzlehttp/guzzle": "^6.3",
+    "ramsey/uuid": "^3.8",
+    "symfony/psr-http-message-bridge": "^1.2",
+    "zendframework/zend-diactoros": "^2.1"
   },
   "require-dev": {
+    "eoneopay/externals": "^v1.0@rc",
     "eoneopay/standards": "dev-master",
+    "eoneopay/utils": "dev-master",
+    "illuminate/console": "^5.5",
+    "laravel/lumen-framework": "^5.5",
+    "loyaltycorp/search": "dev-master",
+    "phpmd/phpmd": "^2.6",
     "phpstan/phpstan": "^0.11.6",
     "phpstan/phpstan-phpunit": "^0.11.1",
     "phpstan/phpstan-strict-rules": "^0.11.0",
     "phpunit/phpunit": "^7.0",
     "roave/security-advisories": "dev-master",
     "sebastian/phpcpd": "^4.1",
-    "squizlabs/php_codesniffer": "^3.4"
+    "squizlabs/php_codesniffer": "^3.4",
+    "vlucas/phpdotenv": "^3.3"
+  },
+  "suggest": {
+    "laravel/framework": "^5.5",
+    "laravel/lumen-framework": "^5.5",
+    "loyaltycorp/search": "dev-master",
+    "phpmd/phpmd": "Check coding best practices",
+    "phpstan/phpstan": "Static analysis of code to detect potential errors",
+    "phpunit/phpunit": "Run unit tests",
+    "sebastian/phpcpd": "Detect code duplication",
+    "sensiolabs/security-checker": "Check project's dependencies for known vulnerabilities",
+    "squizlabs/php_codesniffer": "Check code style",
+    "vlucas/phpdotenv": "When using the lumen bridge, phpdotenv is required"
+  },
+  "autoload": {
+    "psr-4": {
+      "LoyaltyCorp\\Auditing\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\LoyaltyCorp\\Auditing\\": "tests/"
+    }
   },
   "config": {
     "optimize-autoloader": true,
