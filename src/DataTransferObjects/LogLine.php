@@ -6,8 +6,9 @@ namespace LoyaltyCorp\Auditing\DataTransferObjects;
 use DateTime;
 use EoneoPay\Utils\Interfaces\UtcDateTimeInterface;
 use LoyaltyCorp\Auditing\DataTransferObject;
+use LoyaltyCorp\Auditing\Interfaces\DataTransferObjects\LogLineInterface;
 
-class LogLine extends DataTransferObject
+class LogLine extends DataTransferObject implements LogLineInterface
 {
     /**
      * Client ip

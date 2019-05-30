@@ -7,10 +7,10 @@ use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
 use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
 use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
-use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
+use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 
-abstract class Manager implements DynamoDbAwareInterface
+final class Manager implements ManagerInterface
 {
     /**
      * DynamoDb client.
@@ -51,7 +51,7 @@ abstract class Manager implements DynamoDbAwareInterface
      *
      * @return \Aws\DynamoDb\DynamoDbClient
      */
-    protected function getDbClient(): DynamoDbClient
+    public function getDbClient(): DynamoDbClient
     {
         return $this->dbClient;
     }
@@ -63,7 +63,7 @@ abstract class Manager implements DynamoDbAwareInterface
      *
      * @return \LoyaltyCorp\Auditing\Document
      */
-    protected function getDocumentObject(string $documentClass): Document
+    public function getDocumentObject(string $documentClass): Document
     {
         if (\class_exists($documentClass) !== true) {
             throw new InvalidDocumentClassException(
@@ -87,7 +87,7 @@ abstract class Manager implements DynamoDbAwareInterface
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface
      */
-    protected function getGenerator(): UuidGeneratorInterface
+    public function getGenerator(): UuidGeneratorInterface
     {
         return $this->generator;
     }
@@ -97,7 +97,7 @@ abstract class Manager implements DynamoDbAwareInterface
      *
      * @return \Aws\DynamoDb\Marshaler
      */
-    protected function getMarshaler(): Marshaler
+    public function getMarshaler(): Marshaler
     {
         return $this->marshaler;
     }

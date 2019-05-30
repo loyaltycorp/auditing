@@ -9,6 +9,7 @@ use LoyaltyCorp\Auditing\Exceptions\DocumentCreateFailedException;
 use LoyaltyCorp\Auditing\Exceptions\DocumentQueryFailedException;
 use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
+use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use Psr\Http\Message\RequestInterface;
 use Tests\LoyaltyCorp\Auditing\Stubs\DocumentStub;
@@ -19,6 +20,8 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
 /**
  * @covers \LoyaltyCorp\Auditing\Manager
  * @covers \LoyaltyCorp\Auditing\Managers\DocumentManager
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) High coupling required to test document manager
  */
 class DocumentManagerTest extends TestCase
 {
@@ -61,10 +64,10 @@ class DocumentManagerTest extends TestCase
     public function testCreateSuccessfully(): void
     {
         $result = $this->getDocumentManager([
-            'test' => 'ok'
+            'Items' => ['test' => 'ok']
         ])->create(new DtoStub());
 
-        self::assertSame('ok', $result->get('test'));
+        self::assertSame('ok', $result->getContent()['test']);
     }
 
     /**
@@ -102,6 +105,20 @@ class DocumentManagerTest extends TestCase
     }
 
     /**
+     * Test update document successfully.
+     *
+     * @return void
+     */
+    public function testUpdateSuccessfully(): void
+    {
+        $result = $this->getDocumentManager([
+            'Items' => ['test' => 'ok']
+        ])->update('request-id', new DtoStub());
+
+        self::assertSame('ok', $result->getContent()['test']);
+    }
+
+    /**
      * Get document manager.
      *
      * @param mixed[]|null $data
@@ -132,8 +149,7 @@ class DocumentManagerTest extends TestCase
         }
 
         return new DocumentManager(
-            $this->getConnection($handler),
-            new UuidGeneratorStub()
+            new Manager($this->getConnection($handler), new UuidGeneratorStub())
         );
     }
 }

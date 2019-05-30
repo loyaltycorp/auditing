@@ -6,6 +6,7 @@ namespace Tests\LoyaltyCorp\Auditing\Managers;
 use LoyaltyCorp\Auditing\Documents\AuditLog;
 use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
+use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
 use Tests\LoyaltyCorp\Auditing\Stubs\DtoStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Services\UuidGeneratorStub;
@@ -75,8 +76,7 @@ class SchemaManagerTest extends TestCase
     private function getSchemaManager(): SchemaManagerInterface
     {
         return new SchemaManager(
-            $this->getConnection(),
-            new UuidGeneratorStub()
+            new Manager($this->getConnection(), new UuidGeneratorStub())
         );
     }
 }

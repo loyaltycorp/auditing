@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Managers;
 
-use Aws\Result;
 use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\ResponseInterface;
+use LoyaltyCorp\Auditing\Response;
 
 /**
  * @coversNothing
@@ -17,7 +18,7 @@ class DocumentManagerStub implements DocumentManagerInterface
      *
      * @var mixed[]
      */
-    private $results;
+    public $results;
 
     /**
      * Construct DocumentManager stub
@@ -32,11 +33,11 @@ class DocumentManagerStub implements DocumentManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function create(DataObjectInterface $dataObject): Result
+    public function create(DataObjectInterface $dataObject): ResponseInterface
     {
-        return new Result([
-            'test' => 'ok'
-        ]);
+        $this->results = $dataObject->toArray();
+
+        return new Response($this->results);
     }
 
     /**
@@ -45,5 +46,15 @@ class DocumentManagerStub implements DocumentManagerInterface
     public function list(string $documentClass, ?string $expression = null, ?array $attributeValues = null): array
     {
         return $this->results;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(string $objectId, DataObjectInterface $dataObject): ResponseInterface
+    {
+        $this->results = $dataObject->toArray();
+
+        return new Response($this->results);
     }
 }

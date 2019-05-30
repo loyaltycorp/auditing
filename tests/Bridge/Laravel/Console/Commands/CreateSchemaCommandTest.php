@@ -36,8 +36,9 @@ class CreateSchemaCommandTest extends TestCase
     {
         $output = new BufferedOutputStub();
 
-        // Run the command
-        $this->createCommandInstance(CreateSchemaCommand::class, $output)->handle(new SchemaManagerStub());
+        /** @var \LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand $command */
+        $command = $this->createCommandInstance(CreateSchemaCommand::class, $output);
+        $command->handle(new SchemaManagerStub());
 
         return $output->fetch();
     }

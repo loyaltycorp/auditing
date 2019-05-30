@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Services;
 
-use LoyaltyCorp\Auditing\Interfaces\DataObjectInterface;
+use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 
 /**
@@ -21,13 +21,29 @@ class LogWriterStub implements LogWriterInterface
      */
     public function listByLineStatus(int $lineStatus): array
     {
-        return [];
+        return [[
+            'clientIp' => '127.0.01',
+            'lineStatus' => 1,
+            'occurredAt' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'requestData' => '{"send": "me"}',
+            'requestId' => 'request-id',
+            'responseData' => '{"status": "ok"}'
+
+        ]];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write(DataObjectInterface $dataObject): void
+    public function update(string $requestId, LogLine $dataObject): void
+    {
+        $this->writtenDtos[] = $dataObject;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(LogLine $dataObject): void
     {
         $this->writtenDtos[] = $dataObject;
     }

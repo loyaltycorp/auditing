@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Services;
 
+use EoneoPay\Utils\Interfaces\UtcDateTimeInterface;
+use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
+use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Services\LogWriter;
-use Tests\LoyaltyCorp\Auditing\Stubs\DtoStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Managers\DocumentManagerStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
@@ -23,14 +25,15 @@ class LogWriterTest extends TestCase
      */
     public function testListByLineStatusSuccessfully(): void
     {
-        $result = $this->getService([[
+        $manager = new DocumentManagerStub([[
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
             'occurredAt' => (new \DateTime())->format('Y-m-d H:i:s'),
-            'requestData' => '{"status": "ok"}',
-            'responseData' => '{"send": "me"}'
+            'requestData' => '{"send": "me"}',
+            'responseData' => '{"status": "ok"}'
+        ]]);
 
-        ]])->listByLineStatus(1);
+        $result = $this->getService($manager)->listByLineStatus(1);
 
         self::assertCount(1, $result);
     }
@@ -39,23 +42,71 @@ class LogWriterTest extends TestCase
      * Test write log successfully.
      *
      * @return void
+     *
+     * @throws \Exception
      */
     public function testWriteSuccessfully(): void
     {
-        $this->getService()->write(new DtoStub());
+        $expected = [
+            'clientIp' => '127.0.01',
+            'lineStatus' => 1,
+            'occurredAt' => (new \DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'requestData' => '{"send": "me"}',
+            'responseData' => '{"status": "ok"}'
+        ];
+        $manager = new DocumentManagerStub();
 
-        $this->addToAssertionCount(1);
+        $this->getService($manager)->write(new LogLine(
+            '127.0.01',
+            1,
+            new \DateTime(),
+            '{"send": "me"}',
+            '{"status": "ok"}'
+        ));
+
+        self::assertSame($expected, $manager->results);
+    }
+
+    /**
+     * Test update log data successfully.
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function testUpdateSuccessfully(): void
+    {
+        $expected = [
+            'clientIp' => '127.0.01',
+            'lineStatus' => 1,
+            'occurredAt' => (new \DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'requestData' => '{"send": "me"}',
+            'responseData' => '{"status": "ok"}'
+        ];
+        $manager = new DocumentManagerStub();
+
+        $this->getService($manager)->update('request-id', new LogLine(
+            '127.0.01',
+            1,
+            new \DateTime(),
+            '{"send": "me"}',
+            '{"status": "ok"}'
+        ));
+
+        self::assertSame($expected, $manager->results);
     }
 
     /**
      * Get log writer service.
      *
-     * @param mixed[]|null $results Result data
+     * @param \LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface|null $manager
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface
      */
-    private function getService(?array $results = null): LogWriterInterface
+    private function getService(?DocumentManagerInterface $manager = null): LogWriterInterface
     {
-        return new LogWriter(new DocumentManagerStub($results));
+        $manager = $manager ?? new DocumentManagerStub();
+
+        return new LogWriter($manager);
     }
 }
