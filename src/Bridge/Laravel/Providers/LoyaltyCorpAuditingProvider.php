@@ -68,7 +68,6 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
 
         // bind factories
         $this->app->singleton(HttpMessageFactoryInterface::class, Psr7Factory::class);
-        $this->app->singleton(StreamFactoryInterface::class, StreamFactory::class);
 
         // register commands
         $this->registerCommands();

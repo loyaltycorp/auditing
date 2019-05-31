@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\StreamFactory;
 use Zend\Diactoros\UploadedFileFactory;
 
 final class Psr7Factory implements HttpMessageFactoryInterface

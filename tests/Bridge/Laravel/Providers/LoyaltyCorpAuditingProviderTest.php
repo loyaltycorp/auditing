@@ -63,7 +63,6 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
         self::assertInstanceOf(LogWriter::class, $app->make(LogWriterInterface::class));
         self::assertInstanceOf(Psr7Factory::class, $app->make(HttpMessageFactoryInterface::class));
         self::assertInstanceOf(SearchLogWriter::class, $app->make(SearchLogWriterInterface::class));
-        self::assertInstanceOf(StreamFactory::class, $app->make(StreamFactoryInterface::class));
         self::assertInstanceOf(UuidFactory::class, $app->make(UuidFactoryInterface::class));
         self::assertInstanceOf(UuidGenerator::class, $app->make(UuidGeneratorInterface::class));
         // commands
