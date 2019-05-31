@@ -20,9 +20,11 @@ use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
 use LoyaltyCorp\Auditing\Services\Factories\Psr7Factory;
+use LoyaltyCorp\Auditing\Services\Factories\StreamFactory;
 use LoyaltyCorp\Auditing\Services\LogLineFactory;
 use LoyaltyCorp\Auditing\Services\LogWriter;
 use LoyaltyCorp\Auditing\Services\UuidGenerator;
+use Psr\Http\Message\StreamFactoryInterface;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
@@ -66,6 +68,7 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
 
         // bind factories
         $this->app->singleton(HttpMessageFactoryInterface::class, Psr7Factory::class);
+        $this->app->singleton(StreamFactoryInterface::class, StreamFactory::class);
 
         // register commands
         $this->registerCommands();
