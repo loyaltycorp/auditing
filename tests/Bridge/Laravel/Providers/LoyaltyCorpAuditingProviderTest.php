@@ -19,12 +19,14 @@ use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use LoyaltyCorp\Auditing\Services\Factories\Psr7Factory;
 use LoyaltyCorp\Auditing\Services\LogLineFactory;
 use LoyaltyCorp\Auditing\Services\LogWriter;
 use LoyaltyCorp\Auditing\Services\SearchLogWriter;
 use LoyaltyCorp\Auditing\Services\UuidGenerator;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
@@ -54,12 +56,13 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
         self::assertInstanceOf(Manager::class, $app->make(ManagerInterface::class));
         self::assertInstanceOf(SchemaManager::class, $app->make(SchemaManagerInterface::class));
         // services
+        self::assertInstanceOf(HttpLoggerInterface::class, $app->make(HttpLogger::class));
+        self::assertInstanceOf(LogLineFactoryInterface::class, $app->make(LogLineFactory::class));
         self::assertInstanceOf(LogWriter::class, $app->make(LogWriterInterface::class));
+        self::assertInstanceOf(Psr7Factory::class, $app->make(HttpMessageFactoryInterface::class));
         self::assertInstanceOf(SearchLogWriter::class, $app->make(SearchLogWriterInterface::class));
         self::assertInstanceOf(UuidFactory::class, $app->make(UuidFactoryInterface::class));
         self::assertInstanceOf(UuidGenerator::class, $app->make(UuidGeneratorInterface::class));
-        self::assertInstanceOf(HttpLoggerInterface::class, $app->make(HttpLogger::class));
-        self::assertInstanceOf(LogLineFactoryInterface::class, $app->make(LogLineFactory::class));
         // commands
         self::assertInstanceOf(CreateSchemaCommand::class, $app->make('command.create.audit.schema'));
         self::assertInstanceOf(DropSchemaCommand::class, $app->make('command.drop.audit.schema'));

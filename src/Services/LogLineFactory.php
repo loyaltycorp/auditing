@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-class LogLineFactory implements LogLineFactoryInterface
+final class LogLineFactory implements LogLineFactoryInterface
 {
     /**
      * @const int Maximum number of bytes that should be read
