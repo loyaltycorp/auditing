@@ -54,7 +54,6 @@ class Psr7FactoryTest extends TestCase
         $psr7Response = $factory->createResponse($symfonyResponse);
 
         $stream = $psr7Response->getBody();
-        $stream->rewind(); // go to starting position on steam
 
         self::assertSame('{}', $stream->getContents());
     }
