@@ -5,6 +5,7 @@ namespace LoyaltyCorp\Auditing\Services;
 
 use DateTime;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
+use LoyaltyCorp\Auditing\Interfaces\DataTransferObjects\LogLineInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -26,12 +27,17 @@ final class LogLineFactory implements LogLineFactoryInterface
         RequestInterface $request,
         ?ResponseInterface $response
     ): LogLine {
+        $requestString = $this->getStreamContentTruncated($request->getBody());
+        $responseString = $response instanceof ResponseInterface
+            ? $this->getStreamContentTruncated($response->getBody())
+            : null;
+
         return new LogLine(
             $ipAddress,
-            0,
+            LogLineInterface::LINE_STATUS_NOT_INDEXED,
             $now,
-            $this->getStreamContentTruncated($request->getBody()),
-            $response instanceof ResponseInterface ? $this->getStreamContentTruncated($response->getBody()) : null
+            $requestString ?: null,
+            $responseString ?: null
         );
     }
 
