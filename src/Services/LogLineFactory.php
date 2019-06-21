@@ -5,6 +5,7 @@ namespace LoyaltyCorp\Auditing\Services;
 
 use DateTime;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
+use LoyaltyCorp\Auditing\Interfaces\DataTransferObjects\LogLineInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -33,7 +34,7 @@ final class LogLineFactory implements LogLineFactoryInterface
 
         return new LogLine(
             $ipAddress,
-            0,
+            LogLineInterface::LINE_STATUS_NOT_INDEXED,
             $now,
             $requestString ?: null,
             $responseString ?: null
