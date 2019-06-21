@@ -26,12 +26,17 @@ final class LogLineFactory implements LogLineFactoryInterface
         RequestInterface $request,
         ?ResponseInterface $response
     ): LogLine {
+        $requestString = $this->getStreamContentTruncated($request->getBody());
+        $responseString = $response instanceof ResponseInterface
+            ? $this->getStreamContentTruncated($response->getBody())
+            : null;
+
         return new LogLine(
             $ipAddress,
             0,
             $now,
-            $this->getStreamContentTruncated($request->getBody()),
-            $response instanceof ResponseInterface ? $this->getStreamContentTruncated($response->getBody()) : null
+            $requestString ?: null,
+            $responseString ?: null
         );
     }
 
