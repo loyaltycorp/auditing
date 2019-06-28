@@ -8,6 +8,7 @@ use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 use Aws\MockHandler;
 use Aws\Result;
+use EoneoPay\Externals\Environment\Env;
 use Illuminate\Console\Command;
 use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Client\Connection;
@@ -26,6 +27,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TestCase extends BaseTestCae
 {
     /**
+     * Env instance
+     *
+     * @var \EoneoPay\Externals\Environment\Env
+     */
+    private $env;
+
+    /**
+     * Values which have been modified via setEnv()
+     *
+     * @var mixed[]
+     */
+    private $environmentValues = [];
+
+    /**
      * DynamoDb Marshaler instance.
      *
      * @var \Aws\DynamoDb\Marshaler|null
@@ -41,6 +56,17 @@ class TestCase extends BaseTestCae
     {
         /** @noinspection UsingInclusionReturnValueInspection This is how lumen is bootstrapped */
         return require \dirname(__DIR__) . '/tests/bootstrap/app.php';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Reset environment
+        $this->resetEnv();
     }
 
     /**
@@ -145,6 +171,16 @@ class TestCase extends BaseTestCae
     }
 
     /**
+     * Get env instance
+     *
+     * @return \EoneoPay\Externals\Environment\Env
+     */
+    protected function getEnv(): Env
+    {
+        return $this->env ?? $this->env = new Env();
+    }
+
+    /**
      * Get DynamoDb marshaler.
      *
      * @return \Aws\DynamoDb\Marshaler
@@ -156,5 +192,36 @@ class TestCase extends BaseTestCae
         }
 
         return $this->marshaler;
+    }
+
+    /**
+     * Set env value
+     *
+     * @param string $key The key to set
+     * @param mixed $value The value to assign to the key
+     *
+     * @return bool
+     */
+    protected function setEnv(string $key, $value): bool
+    {
+        // Capture key so it can be unset via `putenv` on teardown
+        $this->environmentValues[] = $key;
+
+        return $this->getEnv()->set($key, $value);
+    }
+
+    /**
+     * Reset modified env values
+     *
+     * @return void
+     */
+    private function resetEnv(): void
+    {
+        foreach ($this->environmentValues as $key) {
+            \putenv($key);
+        }
+
+        // Reset values
+        $this->environmentValues = [];
     }
 }

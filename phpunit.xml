@@ -19,5 +19,6 @@
         <env name="AWS_DYNAMODB_REGION" value="ap-southeast-2"/>
         <env name="AWS_DYNAMODB_SECRET_ACCESS_KEY" value="secret"/>
         <env name="AWS_DYNAMODB_VERSION" value="latest"/>
+        <env name="AUDITING_MIDDLEWARE" value="true"/>
     </php>
 </phpunit>

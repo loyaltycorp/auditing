@@ -55,7 +55,7 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
          * @var \Illuminate\Contracts\Foundation\Application $application
          */
         $application = new ApplicationStub();
-        \putenv('AUDITING_MIDDLEWARE=true');
+        $this->setEnv('AUDITING_MIDDLEWARE', true);
         $auditingProvider = new LoyaltyCorpAuditingProvider($application);
 
         $auditingProvider->boot();
@@ -77,7 +77,7 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
          * @var \Illuminate\Contracts\Foundation\Application $application
          */
         $application = new ApplicationStub();
-        \putenv('AUDITING_MIDDLEWARE=false');
+        $this->setEnv('AUDITING_MIDDLEWARE', false);
         $auditingProvider = new LoyaltyCorpAuditingProvider($application);
 
         $auditingProvider->boot();
