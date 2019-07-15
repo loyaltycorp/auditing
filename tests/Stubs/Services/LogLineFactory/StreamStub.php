@@ -33,7 +33,7 @@ class StreamStub implements StreamInterface
      */
     public function __toString()
     {
-        return '';
+        return $this->getContents();
     }
 
     /**
@@ -62,7 +62,11 @@ class StreamStub implements StreamInterface
      */
     public function getContents()
     {
-        return '';
+        return \str_pad(
+            '',
+            $this->contentSize,
+            '0'
+        );
     }
 
     /**

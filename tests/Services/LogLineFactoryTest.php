@@ -40,17 +40,42 @@ class LogLineFactoryTest extends TestCase
     }
 
     /**
-     * Test creating a log line DTO using the factory
+     * Test creating a log line DTO using the factory with no response.
      *
      * @return void
      *
      * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
-    public function testCreationEmptyRequestBecomesNull(): void
+    public function testCreationWithNoResponse(): void
+    {
+        $logLineFactory = $this->getInstance();
+
+        $dto = $logLineFactory->create(
+            '127.0.0.1',
+            new DateTime('2019-05-05 12:12:12'),
+            new RequestStub(),
+            null
+        );
+
+        self::assertSame('127.0.0.1', $dto->getClientIp());
+        self::assertSame('2019-05-05 12:12:12', $dto->getOccurredAt()->format('Y-m-d H:i:s'));
+        self::assertNull($dto->getResponseData());
+    }
+
+    /**
+     * Test creating a log line DTO using the factory with empty request.
+     *
+     * @return void
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
+     */
+    public function testCreationEmptyRequestReturnsExpectedRequestString(): void
     {
         $request = new Request(null, null, new BufferStream());
-
         $logLineFactory = $this->getInstance();
+        $expectedRequest = <<<EOF
+GET / HTTP/1.1\r\nHost: \r\n\r\n
+EOF;
 
         $dto = $logLineFactory->create(
             '127.0.0.1',
@@ -61,18 +86,18 @@ class LogLineFactoryTest extends TestCase
 
         self::assertSame('127.0.0.1', $dto->getClientIp());
         self::assertSame('2019-05-05 12:12:12', $dto->getOccurredAt()->format('Y-m-d H:i:s'));
-        self::assertNull($dto->getRequestData());
+        self::assertEquals($expectedRequest, $dto->getRequestData());
         self::assertIsString($dto->getResponseData());
     }
 
     /**
-     * Test the truncating of request/response body
+     * Test the truncating of message
      *
      * @return void
      *
      * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
-    public function testCreationTruncatesBody(): void
+    public function testCreationTruncatesMessage(): void
     {
         $logLineFactory = $this->getInstance();
 
