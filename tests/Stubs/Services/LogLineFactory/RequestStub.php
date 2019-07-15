@@ -6,6 +6,7 @@ namespace Tests\LoyaltyCorp\Auditing\Stubs\Services\LogLineFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use Zend\Diactoros\Uri;
 
 /**
  * @coversNothing
@@ -55,6 +56,7 @@ class RequestStub implements RequestInterface
      */
     public function getHeaders()
     {
+        return ['key' => ['value']];
     }
 
     /**
@@ -83,6 +85,7 @@ class RequestStub implements RequestInterface
      */
     public function getUri()
     {
+        return new Uri('http::/localhost');
     }
 
     /**
