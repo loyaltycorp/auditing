@@ -6,18 +6,16 @@ namespace LoyaltyCorp\Auditing;
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
 use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
-use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 
 final class Manager implements ManagerInterface
 {
     /**
-     * DynamoDb client.
-     *
-     * @var \Aws\DynamoDb\DynamoDbClient
+     * @var \LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface
      */
-    private $dbClient;
+    private $connection;
 
     /**
      * Uuid generator instance.
@@ -36,24 +34,26 @@ final class Manager implements ManagerInterface
     /**
      * Manager constructor.
      *
-     * @param \LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface $connection
+     * @param \LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface $connection
      * @param \LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface $generator
      */
-    public function __construct(ConnectionInterface $connection, UuidGeneratorInterface $generator)
-    {
-        $this->dbClient = $connection->getDbClient();
+    public function __construct(
+        ConnectionInterface $connection,
+        UuidGeneratorInterface $generator
+    ) {
+        $this->connection = $connection;
         $this->generator = $generator;
         $this->marshaler = new Marshaler();
     }
 
     /**
-     * Get db client.
+     * Get DynamoDb client.
      *
      * @return \Aws\DynamoDb\DynamoDbClient
      */
     public function getDbClient(): DynamoDbClient
     {
-        return $this->dbClient;
+        return $this->connection->getClient();
     }
 
     /**

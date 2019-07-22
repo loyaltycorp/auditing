@@ -138,7 +138,7 @@ class DocumentManagerTest extends TestCase
 
         if ($retries === true) {
             for ($i = 1; $i < DynamoDbAwareInterface::DEFAULT_MAX_ATTEMPTS; $i++) {
-                $handler->append(function (CommandInterface $cmd, RequestInterface $req) use ($data) {
+                $handler->append(static function (CommandInterface $cmd, RequestInterface $req) use ($data) {
                     return new DynamoDbException(
                         $data['message'] ?? 'Mock exception.',
                         $cmd,
