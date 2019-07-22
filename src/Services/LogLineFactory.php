@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Services;
 
 use DateTime;
+use GuzzleHttp\Psr7;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\DataTransferObjects\LogLineInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 final class LogLineFactory implements LogLineFactoryInterface
 {
@@ -27,29 +27,31 @@ final class LogLineFactory implements LogLineFactoryInterface
         RequestInterface $request,
         ?ResponseInterface $response
     ): LogLine {
-        $requestString = $this->getStreamContentTruncated($request->getBody());
-        $responseString = $response instanceof ResponseInterface
-            ? $this->getStreamContentTruncated($response->getBody())
-            : null;
+        $requestString = Psr7\str($request);
+        $responseString =  $response instanceof ResponseInterface ? Psr7\str($response) : null;
 
         return new LogLine(
             $ipAddress,
             LogLineInterface::LINE_STATUS_NOT_INDEXED,
             $now,
-            $requestString ?: null,
-            $responseString ?: null
+            $this->getContentTruncated($requestString),
+            $this->getContentTruncated($responseString)
         );
     }
 
     /**
-     * Truncate the http body to avoid potential memory DoS
+     * Truncate the message to avoid potential memory DoS.
      *
-     * @param \Psr\Http\Message\StreamInterface $stream
+     * @param string $message Http request/response as string
      *
-     * @return string
+     * @return string Truncated message
      */
-    private function getStreamContentTruncated(StreamInterface $stream): string
+    private function getContentTruncated(?string $message = null): ?string
     {
-        return $stream->read(static::MAX_CONTENT_BYTES);
+        if ($message === null) {
+            return null;
+        }
+
+        return \mb_substr($message, 0, static::MAX_CONTENT_BYTES);
     }
 }

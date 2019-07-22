@@ -54,6 +54,7 @@ class ResponseStub implements ResponseInterface
      */
     public function getHeaders()
     {
+        return ['key' => ['value']];
     }
 
     /**
