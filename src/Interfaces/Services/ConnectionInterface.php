@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LoyaltyCorp\Auditing\Interfaces\Client;
+namespace LoyaltyCorp\Auditing\Interfaces\Services;
 
 use Aws\DynamoDb\DynamoDbClient;
 
 interface ConnectionInterface
 {
     /**
-     * Get dynamodb client.
+     * Get the DynamoDb client for this connection
      *
      * @return \Aws\DynamoDb\DynamoDbClient
      */
-    public function getDbClient(): DynamoDbClient;
+    public function getClient(): DynamoDbClient;
 }

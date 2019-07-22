@@ -4,14 +4,15 @@ declare(strict_types=1);
 namespace Tests\LoyaltyCorp\Auditing;
 
 use Aws\CommandInterface;
+use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 use Aws\MockHandler;
 use Aws\Result;
 use Illuminate\Console\Command;
 use Laravel\Lumen\Application;
-use LoyaltyCorp\Auditing\Client\Connection;
-use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface;
+use LoyaltyCorp\Auditing\Services\Connection;
 use PHPUnit\Framework\TestCase as BaseTestCae;
 use Psr\Http\Message\RequestInterface;
 use ReflectionClass;
@@ -107,7 +108,7 @@ class TestCase extends BaseTestCae
         $result = $result ?? [];
 
         if ($exception === true) {
-            $handler->append(function (CommandInterface $cmd, RequestInterface $req) use ($result) {
+            $handler->append(static function (CommandInterface $cmd, RequestInterface $req) use ($result) {
                 return new DynamoDbException(
                     $result['message'] ?? 'Mock exception.',
                     $cmd,
@@ -128,20 +129,24 @@ class TestCase extends BaseTestCae
      *
      * @param \Aws\MockHandler $handler
      *
-     * @return \LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface
+     * @return \LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface
      */
     protected function getConnection(?MockHandler $handler = null): ConnectionInterface
     {
-        $conn = new Connection(
-            'key',
-            'secret',
-            'ap-southeast-2',
-            'http://localhost:8000',
-            'latest',
-            ['handler' => $handler ?? $this->createMockHandler()]
+        return new Connection(
+            new DynamoDbClient(
+                [
+                    'credentials' => [
+                        'key' => 'key',
+                        'secret' => 'secret'
+                    ],
+                    'region' => 'ap-southeast-2',
+                    'endpoint' => 'http://localhost:8000',
+                    'version' => 'latest',
+                    'handler' => $handler ?? $this->createMockHandler()
+                ]
+            )
         );
-
-        return $conn;
     }
 
     /**
