@@ -5,10 +5,8 @@ namespace LoyaltyCorp\Auditing\Bridge\Laravel\Providers;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Lumen\Application;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
-use LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
@@ -37,19 +35,6 @@ use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
  */
 class LoyaltyCorpAuditingProvider extends ServiceProvider
 {
-    /**
-     * Boot service provider
-     *
-     * @return void
-     */
-    public function boot(): void
-    {
-        // Apply middleware into application stack if enabled
-        if ($this->isMiddlewareEnabled() === true) {
-            $this->applyMiddleware();
-        }
-    }
-
     /**
      * @noinspection PhpMissingParentCallCommonInspection Parent implementation is empty
      *
@@ -98,37 +83,6 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
 
         // register commands
         $this->registerCommands();
-    }
-
-    /**
-     * Determine application and apply middleware
-     *
-     * @return void
-     */
-    private function applyMiddleware(): void
-    {
-        $application = $this->app;
-
-        if (($application instanceof Application) === true) {
-            /**
-             * @var \Laravel\Lumen\Application $application
-             *
-             * @see https://youtrack.jetbrains.com/issue/WI-37859 - typehint required until PhpStorm fixes check
-             */
-            $application->middleware([
-                AuditMiddleware::class
-            ]);
-        }
-    }
-
-    /**
-     * Determine globally if middleware logging should be enabled
-     *
-     * @return bool Defaults to true
-     */
-    private function isMiddlewareEnabled(): bool
-    {
-        return (bool)\env('AUDITING_MIDDLEWARE', true);
     }
 
     /**

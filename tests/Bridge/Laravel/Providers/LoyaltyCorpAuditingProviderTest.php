@@ -5,8 +5,6 @@ namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Providers;
 
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
-use LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware;
-use LoyaltyCorp\Auditing\Bridge\Laravel\Providers\LoyaltyCorpAuditingProvider;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
@@ -29,7 +27,6 @@ use LoyaltyCorp\Auditing\Services\UuidGenerator;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
-use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Illuminate\ApplicationStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
 /**
@@ -41,50 +38,6 @@ use Tests\LoyaltyCorp\Auditing\TestCase;
  */
 class LoyaltyCorpAuditingProviderTest extends TestCase
 {
-    /**
-     * Ensure middleware is applied on boot when appropriate
-     *
-     * @return void
-     */
-    public function testMiddlewareAppliedWhenEnabled(): void
-    {
-        /**
-         * Illuminate's packages have odd type hints
-         *
-         * @var \Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Illuminate\ApplicationStub $application
-         * @var \Illuminate\Contracts\Foundation\Application $application
-         */
-        $application = new ApplicationStub();
-        \putenv('AUDITING_MIDDLEWARE=true');
-        $auditingProvider = new LoyaltyCorpAuditingProvider($application);
-
-        $auditingProvider->boot();
-
-        self::assertSame([AuditMiddleware::class], $application->getMiddlewares());
-    }
-
-    /**
-     * Use a spy to ensure middleware is not used when disabled
-     *
-     * @return void
-     */
-    public function testMiddlewareNotAppliedWhenDisabled(): void
-    {
-        /**
-         * Illuminate's packages have odd type hints
-         *
-         * @var \Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Illuminate\ApplicationStub $application
-         * @var \Illuminate\Contracts\Foundation\Application $application
-         */
-        $application = new ApplicationStub();
-        \putenv('AUDITING_MIDDLEWARE=false');
-        $auditingProvider = new LoyaltyCorpAuditingProvider($application);
-
-        $auditingProvider->boot();
-
-        self::assertSame([], $application->getMiddlewares());
-    }
-
     /**
      * Test bindings
      *
