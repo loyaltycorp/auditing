@@ -7,11 +7,10 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\CreateSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands\DropSchemaCommand;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
-use LoyaltyCorp\Auditing\Client\Connection;
-use LoyaltyCorp\Auditing\Interfaces\Client\ConnectionInterface;
 use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
+use LoyaltyCorp\Auditing\Interfaces\Services\ConnectionFactoryInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
@@ -19,6 +18,7 @@ use LoyaltyCorp\Auditing\Interfaces\Services\UuidGeneratorInterface;
 use LoyaltyCorp\Auditing\Manager;
 use LoyaltyCorp\Auditing\Managers\DocumentManager;
 use LoyaltyCorp\Auditing\Managers\SchemaManager;
+use LoyaltyCorp\Auditing\Services\ConnectionFactory;
 use LoyaltyCorp\Auditing\Services\Factories\Psr7Factory;
 use LoyaltyCorp\Auditing\Services\LogLineFactory;
 use LoyaltyCorp\Auditing\Services\LogWriter;
@@ -42,6 +42,8 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
      * Test bindings
      *
      * @return void
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function testServiceProviderBindings(): void
     {
@@ -50,7 +52,7 @@ class LoyaltyCorpAuditingProviderTest extends TestCase
         // assert that there are bound items
         self::assertGreaterThan(0, $app->getBindings());
         // clients
-        self::assertInstanceOf(Connection::class, $app->make(ConnectionInterface::class));
+        self::assertInstanceOf(ConnectionFactory::class, $app->make(ConnectionFactoryInterface::class));
         // managers
         self::assertInstanceOf(DocumentManager::class, $app->make(DocumentManagerInterface::class));
         self::assertInstanceOf(Manager::class, $app->make(ManagerInterface::class));
