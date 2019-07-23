@@ -101,4 +101,16 @@ final class Manager implements ManagerInterface
     {
         return $this->marshaler;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTableName(string $tableName): string
+    {
+        return \sprintf(
+            '%s%s',
+            $this->connection->getTablePrefix() ?? '',
+            $tableName
+        );
+    }
 }

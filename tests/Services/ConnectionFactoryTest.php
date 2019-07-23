@@ -70,6 +70,7 @@ class ConnectionFactoryTest extends TestCase
 
         $resultClient = $connectionFactory->create(
             $region,
+            null,
             $version,
             $additional
         );

@@ -13,4 +13,11 @@ interface ConnectionInterface
      * @return \Aws\DynamoDb\DynamoDbClient
      */
     public function getClient(): DynamoDbClient;
+
+    /**
+     * Optionally allow a prefix to all DynamoDb table names
+     *
+     * @return string|null
+     */
+    public function getTablePrefix(): ?string;
 }

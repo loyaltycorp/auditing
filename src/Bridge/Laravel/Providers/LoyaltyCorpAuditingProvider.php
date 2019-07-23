@@ -56,6 +56,7 @@ class LoyaltyCorpAuditingProvider extends ServiceProvider
             // Use connection factory and environment variables to build the connection class
             $connection = $app->make(ConnectionFactoryInterface::class)->create(
                 \env('AWS_DYNAMODB_REGION', 'ap-southeast-2'),
+                \env('AWS_DYNAMODB_TABLE_PREFIX', null) ?: null,
                 \env('AWS_DYNAMODB_VERSION', 'latest'),
                 \array_filter([
                     'endpoint' => \env('AWS_DYNAMODB_ENDPOINT') ?: null,

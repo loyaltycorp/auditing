@@ -107,6 +107,23 @@ class ManagerTest extends TestCase
     }
 
     /**
+     * Ensure table names modified with prefix is indeed a prefix
+     *
+     * @return void
+     */
+    public function testTableFormatting(): void
+    {
+        $manager = new Manager(
+            $this->getConnection($this->createMockHandler(), 'a-prefix-'),
+            new UuidGeneratorStub()
+        );
+
+        $generatedTableName = $manager->getTableName('BigTable');
+
+        self::assertSame('a-prefix-BigTable', $generatedTableName);
+    }
+
+    /**
      * Get manager.
      *
      * @param mixed[]|null $data Response data

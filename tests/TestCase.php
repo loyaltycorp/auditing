@@ -128,10 +128,11 @@ class TestCase extends BaseTestCae
      * Get connection.
      *
      * @param \Aws\MockHandler $handler
+     * @param string|null $prefix
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface
      */
-    protected function getConnection(?MockHandler $handler = null): ConnectionInterface
+    protected function getConnection(?MockHandler $handler = null, ?string $prefix = null): ConnectionInterface
     {
         return new Connection(
             new DynamoDbClient(
@@ -145,7 +146,8 @@ class TestCase extends BaseTestCae
                     'version' => 'latest',
                     'handler' => $handler ?? $this->createMockHandler()
                 ]
-            )
+            ),
+            $prefix
         );
     }
 

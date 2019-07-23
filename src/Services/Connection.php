@@ -14,13 +14,20 @@ class Connection implements ConnectionInterface
     private $client;
 
     /**
+     * @var string|null
+     */
+    private $prefix;
+
+    /**
      * Connection constructor.
      *
      * @param \Aws\DynamoDb\DynamoDbClient $dynamoDbClient
+     * @param string|null $prefix
      */
-    public function __construct(DynamoDbClient $dynamoDbClient)
+    public function __construct(DynamoDbClient $dynamoDbClient, ?string $prefix = null)
     {
         $this->client = $dynamoDbClient;
+        $this->prefix = $prefix;
     }
 
     /**
@@ -29,5 +36,13 @@ class Connection implements ConnectionInterface
     public function getClient(): DynamoDbClient
     {
         return $this->client;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTablePrefix(): ?string
+    {
+        return $this->prefix;
     }
 }
