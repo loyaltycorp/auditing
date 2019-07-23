@@ -39,4 +39,13 @@ interface ManagerInterface
      * @return \Aws\DynamoDb\Marshaler
      */
     public function getMarshaler(): Marshaler;
+
+    /**
+     * Render the table name
+     *
+     * @param string $tableName
+     *
+     * @return string
+     */
+    public function getTableName(string $tableName): string;
 }

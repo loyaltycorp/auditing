@@ -14,6 +14,7 @@ class ConnectionFactory implements ConnectionFactoryInterface
      */
     public function create(
         string $region,
+        ?string $tablePrefix = null,
         ?string $version = null,
         ?array $additional = null
     ): ConnectionInterface {
@@ -26,6 +27,6 @@ class ConnectionFactory implements ConnectionFactoryInterface
             $additional ?? []
         );
 
-        return new Connection(new DynamoDbClient($configuration));
+        return new Connection(new DynamoDbClient($configuration), $tablePrefix);
     }
 }

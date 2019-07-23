@@ -50,8 +50,9 @@ final class DocumentManager implements DocumentManagerInterface, DynamoDbAwareIn
 
             try {
                 $attemptCounter++;
+                $tableName = $this->manager->getTableName($dataObject->getTableName());
                 $result = $this->manager->getDbClient()->putItem([
-                    self::TABLE_NAME_KEY => $dataObject->getTableName(),
+                    self::TABLE_NAME_KEY => $tableName,
                     self::TABLE_ITEM_KEY => $item,
                     self::CONDITION_EXPRESSION_KEY => 'attribute_not_exists (requestId)'
                 ]);
@@ -93,10 +94,11 @@ final class DocumentManager implements DocumentManagerInterface, DynamoDbAwareIn
     ): array {
         $items = [];
         $document = $this->manager->getDocumentObject($documentClass);
+        $tableName = $this->manager->getTableName($document->getTableName());
 
         try {
             $result = $this->manager->getDbClient()->scan([
-                self::TABLE_NAME_KEY => $document->getTableName(),
+                self::TABLE_NAME_KEY => $tableName,
                 'FilterExpression' => $expression ?? '',
                 'ExpressionAttributeValues' => $this->manager->getMarshaler()->marshalJson(
                     \json_encode($attributeValues ?? []) ?: ''
@@ -125,9 +127,10 @@ final class DocumentManager implements DocumentManagerInterface, DynamoDbAwareIn
         ]);
 
         $item = $this->manager->getMarshaler()->marshalJson(\json_encode($data) ?: '');
+        $tableName = $this->manager->getTableName($dataObject->getTableName());
 
-        $result =  $this->manager->getDbClient()->putItem([
-            self::TABLE_NAME_KEY => $dataObject->getTableName(),
+        $result = $this->manager->getDbClient()->putItem([
+            self::TABLE_NAME_KEY => $tableName,
             self::TABLE_ITEM_KEY => $item,
             self::CONDITION_EXPRESSION_KEY => 'attribute_exists (requestId)'
         ]);
