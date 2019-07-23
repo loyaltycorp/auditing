@@ -28,4 +28,17 @@ class ConnectionTest extends TestCase
 
         self::assertSame($dynamoDbClient, $connectionClient);
     }
+
+    /**
+     * Ensure table prefix supplies value passed into the constructor, unmodified
+     *
+     * @return void
+     */
+    public function testTablePrefix(): void
+    {
+        $dynamoDbClient = new DynamoDbClient(['region' => 'ap-southeast-2', 'version' => 'latest']);
+        $connection = new Connection($dynamoDbClient, 'a-prefix');
+
+        self::assertSame('a-prefix', $connection->getTablePrefix());
+    }
 }

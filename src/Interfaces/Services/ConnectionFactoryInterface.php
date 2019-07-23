@@ -9,6 +9,7 @@ interface ConnectionFactoryInterface
      * Create a DynamoDb client instance
      *
      * @param string $region
+     * @param string|null $tablePrefix
      * @param string|null $version
      * @param mixed[]|null $additional
      *
@@ -16,6 +17,7 @@ interface ConnectionFactoryInterface
      */
     public function create(
         string $region,
+        ?string $tablePrefix = null,
         ?string $version = null,
         ?array $additional = null
     ): ConnectionInterface;

@@ -32,7 +32,10 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
      */
     public function create(DocumentInterface $entity): bool
     {
-        $this->manager->getDbClient()->createTable($entity->toArray());
+        $tableArguments = $entity->toArray();
+        $tableArguments['TableName'] = $this->manager->getTableName($tableArguments['TableName']);
+
+        $this->manager->getDbClient()->createTable($tableArguments);
 
         return true;
     }
@@ -43,9 +46,10 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
     public function drop(string $documentClass): bool
     {
         $document = $this->manager->getDocumentObject($documentClass);
+        $tableName = $this->manager->getTableName($document->getTableName());
 
         $this->manager->getDbClient()->deleteTable([
-            self::TABLE_NAME_KEY => $document->getTableName()
+            self::TABLE_NAME_KEY => $tableName
         ]);
 
         return true;
