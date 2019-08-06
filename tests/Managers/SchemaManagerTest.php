@@ -15,6 +15,7 @@ use LoyaltyCorp\Auditing\Services\Connection;
 use Tests\LoyaltyCorp\Auditing\Stubs\DtoStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Services\UuidGeneratorStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Aws\DynamoDbClientExceptionStub;
+use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Aws\DynamoDbCreateTableExceptionStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Aws\DynamoDbDeleteTableExceptionStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
@@ -37,6 +38,45 @@ class SchemaManagerTest extends TestCase
     }
 
     /**
+     * Test create table exception is rethrown when it can't be handled.
+     *
+     * @return void
+     */
+    public function testCreateExceptionIsRethrownWhenItCantBeHandled(): void
+    {
+        $manager = $this->getSchemaManager(new Connection(
+            new DynamoDbClientExceptionStub(
+                new DynamoDbException(
+                    'Connection not found.',
+                    new Command('CreateTable')
+                )
+            )
+        ));
+
+        $this->expectException(DynamoDbException::class);
+
+        $manager->create(new AuditLog());
+    }
+
+    /**
+     * Test create on an existing table.
+     *
+     * @return void
+     */
+    public function testCreateOnExistingTable(): void
+    {
+        $manager = $this->getSchemaManager(new Connection(
+            new DynamoDbClientExceptionStub(
+                new DynamoDbCreateTableExceptionStub()
+            )
+        ));
+
+        $created = $manager->create(new AuditLog());
+
+        self::assertTrue($created);
+    }
+
+    /**
      * Test drop schema successfully.
      *
      * @return void
@@ -44,6 +84,27 @@ class SchemaManagerTest extends TestCase
     public function testDrop(): void
     {
         self::assertTrue($this->getSchemaManager()->drop(AuditLog::class));
+    }
+
+    /**
+     * Test delete table exception is rethrown when it can't be handled.
+     *
+     * @return void
+     */
+    public function testDropExceptionIsRethrownWhenItCantBeHandled(): void
+    {
+        $manager = $this->getSchemaManager(new Connection(
+            new DynamoDbClientExceptionStub(
+                new DynamoDbException(
+                    'Connection not found.',
+                    new Command('DeleteTable')
+                )
+            )
+        ));
+
+        $this->expectException(DynamoDbException::class);
+
+        $manager->drop(AuditLog::class);
     }
 
     /**
@@ -62,28 +123,6 @@ class SchemaManagerTest extends TestCase
         $dropped = $manager->drop(AuditLog::class);
 
         self::assertTrue($dropped);
-    }
-
-    /**
-     * Test exception is rethrown when it can't be handled.
-     *
-     * @return void
-     */
-    public function testExceptionIsRethrownWhenItCantBeHandled(): void
-    {
-        $manager = $this->getSchemaManager(new Connection(
-            new DynamoDbClientExceptionStub(
-                // an exception that does not have error code that we can handle.
-                new DynamoDbException(
-                    'Connection not found.',
-                    new Command('DeleteTable')
-                )
-            )
-        ));
-
-        $this->expectException(DynamoDbException::class);
-
-        $manager->drop(AuditLog::class);
     }
 
     /**

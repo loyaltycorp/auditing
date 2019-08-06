@@ -36,7 +36,13 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
         $tableArguments = $entity->toArray();
         $tableArguments['TableName'] = $this->manager->getTableName($tableArguments['TableName']);
 
-        $this->manager->getDbClient()->createTable($tableArguments);
+        try {
+            $this->manager->getDbClient()->createTable($tableArguments);
+        } catch (DynamoDbException $exception) {
+            if ($this->canHandleCreateException($exception) === false) {
+                throw $exception;
+            }
+        }
 
         return true;
     }
@@ -54,7 +60,7 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
                 self::TABLE_NAME_KEY => $tableName
             ]);
         } catch (DynamoDbException $exception) {
-            if ($this->canHandleException($exception) === false) {
+            if ($this->canHandleDropException($exception) === false) {
                 throw $exception;
             }
         }
@@ -63,26 +69,76 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
     }
 
     /**
-     * Assert if an exception can be handled and operation can be continued.
+     * Assert if an exception while creating can be handled and
+     * operation can be continued.
      *
      * @param \Aws\DynamoDb\Exception\DynamoDbException $exception
      *
      * @return bool
      */
-    private function canHandleException(DynamoDbException $exception): bool
+    private function canHandleCreateException(DynamoDbException $exception): bool
     {
-        $command = $exception->getCommand()->getName();
-        $errorCode = $exception->getAwsErrorCode();
+        /**
+         * AWS throws ResourceInUseException when you try to create an existing table.
+         *
+         * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#API_CreateTable_Errors
+         */
+        return $this->canHandleException(
+            'CreateTable',
+            ['ResourceInUseException'],
+            $exception,
+            400
+        );
+    }
+
+    /**
+     * Assert if an exception while dropping can be handled and
+     * operation can be continued.
+     *
+     * @param \Aws\DynamoDb\Exception\DynamoDbException $exception
+     *
+     * @return bool
+     */
+    private function canHandleDropException(DynamoDbException $exception): bool
+    {
+        /**
+         * AWS can throw ResourceInUseException or ResourceNotFoundException
+         * when you try to delete a table currently in use or non existent table.
+         *
+         * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html#API_DeleteTable_Errors
+         */
+        return $this->canHandleException(
+            'DeleteTable',
+            ['ResourceInUseException', 'ResourceNotFoundException'],
+            $exception,
+            400
+        );
+    }
+
+    /**
+     * Assert if an exception can be handled based on criteria provided.
+     *
+     * @param string $command AWS dynamoDb command.
+     * @param mixed[] $errorCodes AWS error codes.
+     * @param \Aws\DynamoDb\Exception\DynamoDbException $exception
+     * @param int $statusCode AWS server response code.
+     *
+     * @return bool
+     */
+    private function canHandleException(
+        string $command,
+        array $errorCodes,
+        DynamoDbException $exception,
+        int $statusCode
+    ): bool {
+        $awsCommand = $exception->getCommand()->getName();
+        $awsErrorCode = $exception->getAwsErrorCode();
         $response = $exception->getResponse();
-        $statusCode = $response === null ? 0 : $response->getStatusCode();
+        $awsStatusCode = $response === null ? 0 : $response->getStatusCode();
 
-        if ($command === 'DeleteTable' &&
-            $errorCode === 'ResourceNotFoundException' &&
-            $statusCode === 400) {
-            // known exception thrown when trying to delete non-existent table
-            return true;
-        }
-
-        return false;
+        return
+            $awsCommand === $command &&
+            \in_array($awsErrorCode, $errorCodes, true) === true &&
+            $awsStatusCode === $statusCode;
     }
 }

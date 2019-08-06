@@ -44,4 +44,22 @@ class DynamoDbClientExceptionStub extends DynamoDbClient
 
         throw $this->exception;
     }
+
+    /**
+     * Overriding parent deleteTable method.
+     *
+     * @param mixed[] $args
+     *
+     * @return \Aws\Result
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) argument required to override parent.
+     */
+    public function createTable(array $args = []): Result
+    {
+        if ($this->exception === null) {
+            return new Result();
+        }
+
+        throw $this->exception;
+    }
 }
