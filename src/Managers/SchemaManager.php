@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Managers;
 
+use Aws\DynamoDb\Exception\DynamoDbException;
 use LoyaltyCorp\Auditing\Interfaces\DocumentInterface;
 use LoyaltyCorp\Auditing\Interfaces\DynamoDbAwareInterface;
 use LoyaltyCorp\Auditing\Interfaces\ManagerInterface;
@@ -48,10 +49,40 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
         $document = $this->manager->getDocumentObject($documentClass);
         $tableName = $this->manager->getTableName($document->getTableName());
 
-        $this->manager->getDbClient()->deleteTable([
-            self::TABLE_NAME_KEY => $tableName
-        ]);
+        try {
+            $this->manager->getDbClient()->deleteTable([
+                self::TABLE_NAME_KEY => $tableName
+            ]);
+        } catch (DynamoDbException $exception) {
+            if ($this->canHandleException($exception) === false) {
+                throw $exception;
+            }
+        }
 
         return true;
+    }
+
+    /**
+     * Assert if an exception can be handled and operation can be continued.
+     *
+     * @param \Aws\DynamoDb\Exception\DynamoDbException $exception
+     *
+     * @return bool
+     */
+    private function canHandleException(DynamoDbException $exception): bool
+    {
+        $command = $exception->getCommand()->getName();
+        $errorCode = $exception->getAwsErrorCode();
+        $response = $exception->getResponse();
+        $statusCode = $response === null ? 0 : $response->getStatusCode();
+
+        if ($command === 'DeleteTable' &&
+            $errorCode === 'ResourceNotFoundException' &&
+            $statusCode === 400) {
+            // known exception thrown when trying to delete non-existent table
+            return true;
+        }
+
+        return false;
     }
 }
