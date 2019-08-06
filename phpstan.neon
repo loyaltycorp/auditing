@@ -3,3 +3,6 @@ includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
     ignoreErrors:
+        -
+            message: '#Tests\\LoyaltyCorp\\Auditing\\Stubs\\Vendor\\Aws\\DynamoDbClientExceptionStub::__construct\(\) does not call parent constructor from Aws\\AwsClient#'
+            path: tests/Stubs/Vendor/Aws/DynamoDbClientExceptionStub.php
