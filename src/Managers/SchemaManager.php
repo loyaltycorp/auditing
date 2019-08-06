@@ -79,13 +79,14 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
     private function canHandleCreateException(DynamoDbException $exception): bool
     {
         /**
-         * AWS throws ResourceInUseException when you try to create an existing table.
+         * AWS throws ResourceInUseException
+         * when you try to create an existing table.
          *
          * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#API_CreateTable_Errors
          */
         return $this->canHandleException(
             'CreateTable',
-            ['ResourceInUseException'],
+            'ResourceInUseException',
             $exception,
             400
         );
@@ -102,14 +103,14 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
     private function canHandleDropException(DynamoDbException $exception): bool
     {
         /**
-         * AWS can throw ResourceInUseException or ResourceNotFoundException
-         * when you try to delete a table currently in use or non existent table.
+         * AWS throws ResourceNotFoundException
+         * when you try to delete a non existent table.
          *
          * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html#API_DeleteTable_Errors
          */
         return $this->canHandleException(
             'DeleteTable',
-            ['ResourceInUseException', 'ResourceNotFoundException'],
+            'ResourceNotFoundException',
             $exception,
             400
         );
@@ -119,7 +120,7 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
      * Assert if an exception can be handled based on criteria provided.
      *
      * @param string $command AWS dynamoDb command.
-     * @param mixed[] $errorCodes AWS error codes.
+     * @param string $errorCode AWS error code.
      * @param \Aws\DynamoDb\Exception\DynamoDbException $exception
      * @param int $statusCode AWS server response code.
      *
@@ -127,7 +128,7 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
      */
     private function canHandleException(
         string $command,
-        array $errorCodes,
+        string $errorCode,
         DynamoDbException $exception,
         int $statusCode
     ): bool {
@@ -138,7 +139,7 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
 
         return
             $awsCommand === $command &&
-            \in_array($awsErrorCode, $errorCodes, true) === true &&
+            $awsErrorCode === $errorCode &&
             $awsStatusCode === $statusCode;
     }
 }
