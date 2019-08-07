@@ -5,6 +5,8 @@ namespace Tests\LoyaltyCorp\Auditing\Managers;
 
 use Aws\Command;
 use Aws\DynamoDb\Exception\DynamoDbException;
+use Aws\MockHandler;
+use Aws\Result;
 use LoyaltyCorp\Auditing\Documents\AuditLog;
 use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
 use LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface;
@@ -15,7 +17,6 @@ use LoyaltyCorp\Auditing\Services\Connection;
 use Tests\LoyaltyCorp\Auditing\Stubs\DtoStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Services\UuidGeneratorStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Aws\DynamoDbClientExceptionStub;
-use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Aws\DynamoDbCreateTableExceptionStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Vendor\Aws\DynamoDbDeleteTableExceptionStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
@@ -34,7 +35,16 @@ class SchemaManagerTest extends TestCase
      */
     public function testCreate(): void
     {
-        self::assertTrue($this->getSchemaManager()->create(new AuditLog()));
+        $handler = new MockHandler();
+        // listTables
+        $handler->append(new Result([]));
+        // createTable
+        $handler->append(new Result());
+
+        $manager = $this->getSchemaManager(null, $handler);
+        $created = $manager->create(new AuditLog());
+
+        self::assertTrue($created);
     }
 
     /**
@@ -65,12 +75,15 @@ class SchemaManagerTest extends TestCase
      */
     public function testCreateOnExistingTable(): void
     {
-        $manager = $this->getSchemaManager(new Connection(
-            new DynamoDbClientExceptionStub(
-                new DynamoDbCreateTableExceptionStub()
-            )
-        ));
+        $handler = new MockHandler();
+        // listTables
+        $handler->append(new Result([
+            'TableNames' => ['AuditLog']
+        ]));
+        // createTable
+        $handler->append(new Result());
 
+        $manager = $this->getSchemaManager(null, $handler);
         $created = $manager->create(new AuditLog());
 
         self::assertTrue($created);
@@ -159,13 +172,19 @@ class SchemaManagerTest extends TestCase
      * Get schema manager.
      *
      * @param \LoyaltyCorp\Auditing\Interfaces\Services\ConnectionInterface|null $connection
+     * @param \Aws\MockHandler|null $handler
      *
      * @return \LoyaltyCorp\Auditing\Interfaces\Managers\SchemaManagerInterface
      */
-    private function getSchemaManager(?ConnectionInterface $connection = null): SchemaManagerInterface
-    {
+    private function getSchemaManager(
+        ?ConnectionInterface $connection = null,
+        ?MockHandler $handler = null
+    ): SchemaManagerInterface {
         return new SchemaManager(
-            new Manager($connection ?? $this->getConnection(), new UuidGeneratorStub())
+            new Manager(
+                $connection ?? $this->getConnection($handler),
+                new UuidGeneratorStub()
+            )
         );
     }
 }

@@ -36,7 +36,7 @@ class DynamoDbClientExceptionStub extends DynamoDbClient
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) argument required to override parent.
      */
-    public function deleteTable(array $args = []): Result
+    public function createTable(array $args = []): Result
     {
         if ($this->exception === null) {
             return new Result();
@@ -54,12 +54,26 @@ class DynamoDbClientExceptionStub extends DynamoDbClient
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) argument required to override parent.
      */
-    public function createTable(array $args = []): Result
+    public function deleteTable(array $args = []): Result
     {
         if ($this->exception === null) {
             return new Result();
         }
 
         throw $this->exception;
+    }
+
+    /**
+     * Overriding parent listTables method.
+     *
+     * @param mixed[] $args
+     *
+     * @return \Aws\Result
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) argument required to override parent.
+     */
+    public function listTables(array $args = []): Result
+    {
+        return new Result();
     }
 }
