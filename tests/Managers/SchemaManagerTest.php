@@ -36,7 +36,7 @@ class SchemaManagerTest extends TestCase
     public function testCreate(): void
     {
         $handler = new MockHandler();
-        // listTabled
+        // listTables
         $handler->append(new Result([]));
         // createTable
         $handler->append(new Result());
@@ -76,11 +76,10 @@ class SchemaManagerTest extends TestCase
     public function testCreateOnExistingTable(): void
     {
         $handler = new MockHandler();
-        // listTabled
+        // listTables
         $handler->append(new Result([
-                'TableNames' => ['AuditLog']
-            ])
-        );
+            'TableNames' => ['AuditLog']
+        ]));
         // createTable
         $handler->append(new Result());
 
