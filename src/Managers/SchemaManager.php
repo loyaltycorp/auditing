@@ -36,13 +36,11 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
         $tableArguments = $entity->toArray();
         $tableArguments['TableName'] = $this->manager->getTableName($tableArguments['TableName']);
 
-        try {
-            $this->manager->getDbClient()->createTable($tableArguments);
-        } catch (DynamoDbException $exception) {
-            if ($this->canHandleCreateException($exception) === false) {
-                throw $exception;
-            }
+        if ($this->tableExists($tableArguments['TableName']) === true) {
+            return true;
         }
+
+        $this->manager->getDbClient()->createTable($tableArguments);
 
         return true;
     }
@@ -66,30 +64,6 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
         }
 
         return true;
-    }
-
-    /**
-     * Assert if an exception while creating can be handled and
-     * operation can be continued.
-     *
-     * @param \Aws\DynamoDb\Exception\DynamoDbException $exception
-     *
-     * @return bool
-     */
-    private function canHandleCreateException(DynamoDbException $exception): bool
-    {
-        /**
-         * AWS throws ResourceInUseException
-         * when you try to create an existing table.
-         *
-         * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html#API_CreateTable_Errors
-         */
-        return $this->canHandleException(
-            'CreateTable',
-            'ResourceInUseException',
-            $exception,
-            400
-        );
     }
 
     /**
@@ -141,5 +115,25 @@ final class SchemaManager implements DynamoDbAwareInterface, SchemaManagerInterf
             $awsCommand === $command &&
             $awsErrorCode === $errorCode &&
             $awsStatusCode === $statusCode;
+    }
+
+    /**
+     * Check if the table already exists in db
+     *
+     * @param string $tableName
+     *
+     * @return bool
+     */
+    private function tableExists(
+        string $tableName
+    ): bool {
+        $result = $this->manager->getDbClient()->listTables();
+        $tables = $result->get('TableNames');
+
+        if (\is_array($tables) === false) {
+            return false;
+        }
+
+        return \in_array($tableName, $tables, true) === true;
     }
 }
