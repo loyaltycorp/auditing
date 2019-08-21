@@ -46,7 +46,9 @@ class AuditingSearchHandlerTest extends TestCase
             ]
         ];
 
-        self::assertSame($expected, AuditingSearchHandler::getMappings());
+        $handler = new AuditingSearchHandler();
+
+        self::assertSame($expected, $handler::getMappings());
     }
 
     /**
@@ -61,6 +63,8 @@ class AuditingSearchHandlerTest extends TestCase
             'number_of_shards' => 1
         ];
 
-        self::assertSame($expected, AuditingSearchHandler::getSettings());
+        $handler = new AuditingSearchHandler();
+
+        self::assertSame($expected, $handler::getSettings());
     }
 }
