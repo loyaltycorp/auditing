@@ -19,7 +19,7 @@
     "eoneopay/utils": "dev-master",
     "illuminate/console": "^5.5",
     "laravel/lumen-framework": "^5.5",
-    "loyaltycorp/search": "dev-master",
+    "loyaltycorp/search": "^1.1.0",
     "phpmd/phpmd": "^2.6",
     "phpstan/phpstan": "^0.11.6",
     "phpstan/phpstan-phpunit": "^0.11.1",
