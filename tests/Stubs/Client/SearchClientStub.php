@@ -23,4 +23,67 @@ class SearchClientStub implements ClientInterface
     public function bulkUpdate(string $index, array $documents): void
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createAlias(string $indexName, string $aliasName): void
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createIndex(string $name, ?array $mappings = null, ?array $settings = null): void
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteAlias(array $aliases): void
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteIndex(string $name): void
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases(?string $name = null): array
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIndices(?string $name = null): array
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAlias(string $name): bool
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isIndex(string $name): bool
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function moveAlias(array $aliases): void
+    {
+    }
 }
