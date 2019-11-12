@@ -1,5 +1,5 @@
 {
-  "name": "loyaltycorp/auditing",
+  "name": "eonx-com/auditing",
   "description": "Auditing library that adds request and response logging to applications",
   "type": "library",
   "license": "BSD-3-Clause",
@@ -14,9 +14,9 @@
     "zendframework/zend-diactoros": "^2.1"
   },
   "require-dev": {
-    "eoneopay/externals": "^v1.0@rc",
-    "eoneopay/standards": "dev-master",
-    "eoneopay/utils": "dev-master",
+    "eonx-com/externals": "^v1.0",
+    "eonx-com/standards": "^0.2",
+    "eonx-com/utils": "^1.0",
     "illuminate/console": "^5.5",
     "laravel/lumen-framework": "^5.5",
     "loyaltycorp/search": "^1.1.0",

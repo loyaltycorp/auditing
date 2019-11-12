@@ -27,6 +27,13 @@ class SearchClientStub implements ClientInterface
     /**
      * {@inheritdoc}
      */
+    public function count(string $index): int
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createAlias(string $indexName, string $aliasName): void
     {
     }

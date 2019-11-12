@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Services;
 
+use EoneoPay\Utils\DateTime;
 use EoneoPay\Utils\Interfaces\UtcDateTimeInterface;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\Managers\DocumentManagerInterface;
@@ -28,7 +29,7 @@ class LogWriterTest extends TestCase
         $manager = new DocumentManagerStub([[
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
-            'occurredAt' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'occurredAt' => (new DateTime())->format('Y-m-d H:i:s'),
             'requestData' => '{"send": "me"}',
             'responseData' => '{"status": "ok"}'
         ]]);
@@ -50,7 +51,7 @@ class LogWriterTest extends TestCase
         $expected = [
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
-            'occurredAt' => (new \DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'occurredAt' => (new DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
             'requestData' => '{"send": "me"}',
             'responseData' => '{"status": "ok"}'
         ];
@@ -59,7 +60,7 @@ class LogWriterTest extends TestCase
         $this->getService($manager)->write(new LogLine(
             '127.0.01',
             1,
-            new \DateTime(),
+            new DateTime(),
             '{"send": "me"}',
             '{"status": "ok"}'
         ));
@@ -79,7 +80,7 @@ class LogWriterTest extends TestCase
         $expected = [
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
-            'occurredAt' => (new \DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'occurredAt' => (new DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
             'requestData' => '{"send": "me"}',
             'responseData' => '{"status": "ok"}'
         ];
@@ -88,7 +89,7 @@ class LogWriterTest extends TestCase
         $this->getService($manager)->update('request-id', new LogLine(
             '127.0.01',
             1,
-            new \DateTime(),
+            new DateTime(),
             '{"send": "me"}',
             '{"status": "ok"}'
         ));

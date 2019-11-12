@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LoyaltyCorp\Auditing\Bridge\Laravel\Console\Commands;
 
+use EoneoPay\Utils\DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Bus\Dispatcher as IlluminateDisptacher;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Jobs\SearchLogWriterJob;
@@ -40,7 +41,7 @@ final class LogUnindexedSearchItemCommand extends Command
             $dispatcher->dispatch(new SearchLogWriterJob($line['requestId'], new LogLine(
                 $line['clientIp'],
                 $line['lineStatus'],
-                new \DateTime($line['occurredAt']),
+                new DateTime($line['occurredAt']),
                 $line['requestData'],
                 $line['responseData']
             )));
