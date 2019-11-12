@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Services;
 
+use EoneoPay\Utils\DateTime;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogWriterInterface;
 
@@ -18,13 +19,15 @@ class LogWriterStub implements LogWriterInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
     public function listByLineStatus(int $lineStatus): array
     {
         return [[
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
-            'occurredAt' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'occurredAt' => (new DateTime())->format('Y-m-d H:i:s'),
             'requestData' => '{"send": "me"}',
             'requestId' => 'request-id',
             'responseData' => '{"status": "ok"}'
