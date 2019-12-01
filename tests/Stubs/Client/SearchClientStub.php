@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Client;
 
-use LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate;
 use LoyaltyCorp\Search\Interfaces\ClientInterface;
 
 /**

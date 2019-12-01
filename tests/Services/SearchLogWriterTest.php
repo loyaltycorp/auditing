@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Tests\LoyaltyCorp\Auditing\Services;
 
 use EoneoPay\Utils\DateTime;
-use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
 use LoyaltyCorp\Auditing\Services\SearchLogWriter;
 use LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate;
 use Tests\LoyaltyCorp\Auditing\Stubs\Client\SearchClientStub;
