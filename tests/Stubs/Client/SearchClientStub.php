@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Client;
 
+use LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate;
 use LoyaltyCorp\Search\Interfaces\ClientInterface;
 
 /**
@@ -10,6 +11,11 @@ use LoyaltyCorp\Search\Interfaces\ClientInterface;
  */
 class SearchClientStub implements ClientInterface
 {
+    /**
+     * @var \LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate[][]
+     */
+    private $updates;
+
     /**
      * {@inheritdoc}
      */
@@ -20,8 +26,9 @@ class SearchClientStub implements ClientInterface
     /**
      * {@inheritdoc}
      */
-    public function bulkUpdate(string $index, array $documents): void
+    public function bulkUpdate(array $documents): void
     {
+        $this->updates[] = $documents;
     }
 
     /**
@@ -71,6 +78,14 @@ class SearchClientStub implements ClientInterface
      */
     public function getIndices(?string $name = null): array
     {
+    }
+
+    /**
+     * @return \LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate[][]
+     */
+    public function getUpdates(): array
+    {
+        return $this->updates;
     }
 
     /**

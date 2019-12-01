@@ -15,11 +15,11 @@
   },
   "require-dev": {
     "eonx-com/externals": "^v1.0",
+    "eonx-com/search": "^2.1",
     "eonx-com/standards": "^0.2",
     "eonx-com/utils": "^1.0",
     "illuminate/console": "^5.5",
     "laravel/lumen-framework": "^5.5",
-    "loyaltycorp/search": "^1.1.0",
     "phpmd/phpmd": "^2.6",
     "phpstan/phpstan": "^0.11.6",
     "phpstan/phpstan-phpunit": "^0.11.1",
@@ -33,7 +33,6 @@
   "suggest": {
     "laravel/framework": "^5.5",
     "laravel/lumen-framework": "^5.5",
-    "loyaltycorp/search": "dev-master",
     "phpmd/phpmd": "Check coding best practices",
     "phpstan/phpstan": "Static analysis of code to detect potential errors",
     "phpunit/phpunit": "Run unit tests",
