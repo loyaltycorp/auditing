@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Tests\LoyaltyCorp\Auditing\Services;
 
 use EoneoPay\Utils\DateTime;
-use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
 use LoyaltyCorp\Auditing\Services\SearchLogWriter;
+use LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate;
 use Tests\LoyaltyCorp\Auditing\Stubs\Client\SearchClientStub;
 use Tests\LoyaltyCorp\Auditing\TestCase;
 
@@ -23,25 +23,35 @@ class SearchLogWriterTest extends TestCase
      */
     public function testBulkWrite(): void
     {
-        $this->getService()->bulkWrite([[
+        $searchClient = new SearchClientStub();
+        $searchLogWriter = new SearchLogWriter($searchClient);
+
+        $line = [
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
             'occurredAt' => (new DateTime())->format('Y-m-d H:i:s'),
             'requestData' => '{"send": "me"}',
             'requestId' => 'request-id',
             'responseData' => '{"status": "ok"}'
-        ]]);
+        ];
 
-        $this->addToAssertionCount(1);
-    }
+        $expected = [
+            new DocumentUpdate(
+                'http-requests',
+                'request-id',
+                [
+                    'clientIp' => '127.0.01',
+                    'lineStatus' => 1,
+                    'occurredAt' => (new DateTime())->format('Y-m-d H:i:s'),
+                    'requestData' => '{"send": "me"}',
+                    'requestId' => 'request-id',
+                    'responseData' => '{"status": "ok"}'
+                ]
+            )
+        ];
 
-    /**
-     * Get search log writer service.
-     *
-     * @return \LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface
-     */
-    private function getService(): SearchLogWriterInterface
-    {
-        return new SearchLogWriter(new SearchClientStub());
+        $searchLogWriter->bulkWrite([$line]);
+
+        self::assertEquals([$expected], $searchClient->getUpdates());
     }
 }
