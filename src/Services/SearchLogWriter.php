@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LoyaltyCorp\Auditing\Services;
 
 use LoyaltyCorp\Auditing\Interfaces\Services\SearchLogWriterInterface;
+use LoyaltyCorp\Search\DataTransferObjects\DocumentUpdate;
 use LoyaltyCorp\Search\Interfaces\ClientInterface;
 
 final class SearchLogWriter implements SearchLogWriterInterface
@@ -33,9 +34,13 @@ final class SearchLogWriter implements SearchLogWriterInterface
         $documents = [];
 
         foreach ($logLines as $logLine) {
-            $documents[$logLine['requestId']] = $logLine;
+            $documents[] = new DocumentUpdate(
+                'http-requests',
+                $logLine['requestId'],
+                $logLine
+            );
         }
 
-        $this->searchClient->bulkUpdate('http-requests', $documents);
+        $this->searchClient->bulkUpdate($documents);
     }
 }
