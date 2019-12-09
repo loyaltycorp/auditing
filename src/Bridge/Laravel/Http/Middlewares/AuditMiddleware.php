@@ -178,6 +178,7 @@ class AuditMiddleware
             $dateTime,
             $request->header('X-Forwarded-For') ?? $request->ip() ?? '',
             $psrRequest,
-            $psrResponse);
+            $psrResponse
+        );
     }
 }
