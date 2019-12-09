@@ -273,17 +273,20 @@ class AuditMiddlewareTest extends TestCase
     /**
      * Get symfony request
      *
+     * @param string[] $headers Optional list of additional headers
+     *
      * @return \Illuminate\Http\Request
      */
-    private function getRequest(): Request
+    private function getRequest(array $headers = []): Request
     {
+        $headers = \array_merge(['HTTP_HOST' => 'loyaltycorp.com.au', 'REMOTE_ADDR' => '127.0.0.1'], $headers);
         return new Request(
             ['query' => 'value'],
             ['request' => 'value'],
             [],
             [],
             [],
-            ['HTTP_HOST' => 'loyaltycorp.com.au', 'REMOTE_ADDR' => '127.0.0.1'],
+            $headers,
             'Content'
         );
     }
