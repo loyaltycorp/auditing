@@ -56,6 +56,6 @@
     "sort-packages": true
   },
   "replace": {
-    "loyaltycorp/auditing": "^1.0"
+    "loyaltycorp/auditing": "*"
   }
 }
