@@ -174,6 +174,10 @@ class AuditMiddleware
             $psrResponse = $response;
         }
 
-        $this->callHttpLogger($dateTime, $request->ip() ?? '', $psrRequest, $psrResponse);
+        $this->callHttpLogger(
+            $dateTime,
+            $request->header('X-Forwarded-For') ?? $request->ip() ?? '',
+            $psrRequest,
+            $psrResponse);
     }
 }
