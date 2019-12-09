@@ -54,5 +54,8 @@
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true
+  },
+  "replace": {
+    "loyaltycorp/auditing": "^1.0"
   }
 }
