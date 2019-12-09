@@ -264,7 +264,7 @@ class AuditMiddlewareTest extends TestCase
         $middleware = $this->getMiddleware($httpLogger);
 
         $middleware->handle(
-            $this->getRequest(['HTTP_X-Forwarded-For' => '127.2.3.4']),
+            $this->getRequest(['HTTP_X-Forwarded-For' => ['127.2.3.4', '127.5.6.7']]),
             static function (): Response {
                 return new Response('OK');
             }
@@ -299,7 +299,7 @@ class AuditMiddlewareTest extends TestCase
     /**
      * Get symfony request
      *
-     * @param string[] $headers Optional list of additional headers
+     * @param string[][] $headers Optional list of additional headers
      *
      * @return \Illuminate\Http\Request
      */
