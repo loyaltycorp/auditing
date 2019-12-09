@@ -252,6 +252,32 @@ class AuditMiddlewareTest extends TestCase
     }
 
     /**
+     * Test if middleware logs the forwarding proxy address if it is available.
+     *
+     * @return void
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
+     */
+    public function testProxyIpPassedToHttpLogger(): void
+    {
+        $httpLogger = new HttpLoggerStub();
+        $middleware = $this->getMiddleware($httpLogger);
+
+        $middleware->handle(
+            $this->getRequest(['HTTP_X-Forwarded-For' => '127.2.3.4']),
+            static function (): Response {
+                return new Response('OK');
+            }
+        );
+
+        self::assertInstanceOf(RequestInterface::class, $httpLogger->getRequest());
+        self::assertInstanceOf(ResponseInterface::class, $httpLogger->getResponse());
+        self::assertSame('127.2.3.4', $httpLogger->getIpAddress());
+        self::assertSame('loyaltycorp.com.au', $httpLogger->getRequest()->getUri()->getHost());
+        self::assertSame('OK', (string)$httpLogger->getResponse()->getBody());
+    }
+
+    /**
      * Get instance of middleware
      *
      * @param \LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface|null $httpLogger
