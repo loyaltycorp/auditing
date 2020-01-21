@@ -174,6 +174,14 @@ class AuditMiddleware
             $psrResponse = $response;
         }
 
-        $this->callHttpLogger($dateTime, $request->ip() ?? '', $psrRequest, $psrResponse);
+        /** @var string $ipAddress Only one string is ever returned, see testProxyIpPassedToHttpLogger */
+        $ipAddress = $request->header('X-Forwarded-For') ?? $request->ip() ?? '';
+
+        $this->callHttpLogger(
+            $dateTime,
+            $ipAddress,
+            $psrRequest,
+            $psrResponse
+        );
     }
 }
