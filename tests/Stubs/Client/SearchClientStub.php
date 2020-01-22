@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\LoyaltyCorp\Auditing\Stubs\Client;
 
+use LoyaltyCorp\Search\DataTransferObjects\ClusterHealth;
 use LoyaltyCorp\Search\Interfaces\ClientInterface;
 
 /**
@@ -69,6 +70,13 @@ class SearchClientStub implements ClientInterface
      * {@inheritdoc}
      */
     public function getAliases(?string $name = null): array
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHealth(): ClusterHealth
     {
     }
 
