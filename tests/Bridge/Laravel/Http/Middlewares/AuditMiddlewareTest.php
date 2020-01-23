@@ -10,6 +10,7 @@ use LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
 use LoyaltyCorp\Auditing\Services\Factories\Psr7Factory;
+use LoyaltyCorp\Multitenancy\Database\Entities\Provider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -37,7 +38,8 @@ class AuditMiddlewareTest extends TestCase
      */
     public function testHandle(): void
     {
-        $middleware = $this->getMiddleware();
+        $httpLogger = new HttpLoggerStub();
+        $middleware = $this->getMiddleware($httpLogger);
 
         $response = $middleware->handle(
             $this->getRequest(),
@@ -47,6 +49,8 @@ class AuditMiddlewareTest extends TestCase
         );
 
         self::assertSame('OK', $response->getContent());
+        // because request has no provider attribute.
+        self::assertNull($httpLogger->getProvider());
     }
 
     /**
@@ -143,6 +147,34 @@ class AuditMiddlewareTest extends TestCase
     }
 
     /**
+     * Test that audit middleware fetches provider if it exists and passes it down to services.
+     *
+     * @return void
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
+     */
+    public function testMiddlewareFetchesTheProviderAndPassesItDown(): void
+    {
+        $provider = new Provider('provider', 'test-provider');
+
+        $httpLogger = new HttpLoggerStub();
+        $middleware = $this->getMiddleware($httpLogger);
+
+        $request = $this->getRequest();
+        $request->attributes->set('provider', $provider);
+
+        $middleware->handle(
+            $request,
+            static function (): Response {
+                return new Response('OK');
+            }
+        );
+
+        // assert that provider was passed on to logger stubs.
+        self::assertSame($provider, $httpLogger->getProvider());
+    }
+
+    /**
      * Test to assert that an exception is caught and the process
      * continues to generate psr7 request/response
      *
@@ -169,6 +201,32 @@ class AuditMiddlewareTest extends TestCase
         self::assertInstanceOf(ServerRequestInterface::class, $httpLogger->getRequest());
         self::assertNull($httpLogger->getResponse());
         self::assertInstanceOf(DateTime::class, $httpLogger->getNow());
+    }
+
+    /**
+     * Test if middleware logs the forwarding proxy address if it is available.
+     *
+     * @return void
+     *
+     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
+     */
+    public function testProxyIpPassedToHttpLogger(): void
+    {
+        $httpLogger = new HttpLoggerStub();
+        $middleware = $this->getMiddleware($httpLogger);
+
+        $middleware->handle(
+            $this->getRequest(['HTTP_X-Forwarded-For' => ['127.2.3.4', '127.5.6.7']]),
+            static function (): Response {
+                return new Response('OK');
+            }
+        );
+
+        self::assertInstanceOf(RequestInterface::class, $httpLogger->getRequest());
+        self::assertInstanceOf(ResponseInterface::class, $httpLogger->getResponse());
+        self::assertSame('127.2.3.4', $httpLogger->getIpAddress());
+        self::assertSame('loyaltycorp.com.au', $httpLogger->getRequest()->getUri()->getHost());
+        self::assertSame('OK', (string)$httpLogger->getResponse()->getBody());
     }
 
     /**
@@ -252,32 +310,6 @@ class AuditMiddlewareTest extends TestCase
     }
 
     /**
-     * Test if middleware logs the forwarding proxy address if it is available.
-     *
-     * @return void
-     *
-     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
-     */
-    public function testProxyIpPassedToHttpLogger(): void
-    {
-        $httpLogger = new HttpLoggerStub();
-        $middleware = $this->getMiddleware($httpLogger);
-
-        $middleware->handle(
-            $this->getRequest(['HTTP_X-Forwarded-For' => ['127.2.3.4', '127.5.6.7']]),
-            static function (): Response {
-                return new Response('OK');
-            }
-        );
-
-        self::assertInstanceOf(RequestInterface::class, $httpLogger->getRequest());
-        self::assertInstanceOf(ResponseInterface::class, $httpLogger->getResponse());
-        self::assertSame('127.2.3.4', $httpLogger->getIpAddress());
-        self::assertSame('loyaltycorp.com.au', $httpLogger->getRequest()->getUri()->getHost());
-        self::assertSame('OK', (string)$httpLogger->getResponse()->getBody());
-    }
-
-    /**
      * Get instance of middleware
      *
      * @param \LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface|null $httpLogger
@@ -306,6 +338,7 @@ class AuditMiddlewareTest extends TestCase
     private function getRequest(array $headers = []): Request
     {
         $headers = \array_merge(['HTTP_HOST' => 'loyaltycorp.com.au', 'REMOTE_ADDR' => '127.0.0.1'], $headers);
+
         return new Request(
             ['query' => 'value'],
             ['request' => 'value'],
