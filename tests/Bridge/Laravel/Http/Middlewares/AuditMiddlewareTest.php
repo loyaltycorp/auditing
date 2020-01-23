@@ -26,6 +26,7 @@ use Zend\Diactoros\Response\TextResponse;
  * @covers \LoyaltyCorp\Auditing\Bridge\Laravel\Http\Middlewares\AuditMiddleware
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Requires many classes for full testing
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) More test methods equals more testing.
  */
 class AuditMiddlewareTest extends TestCase
 {
