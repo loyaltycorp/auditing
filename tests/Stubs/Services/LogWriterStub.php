@@ -28,6 +28,7 @@ class LogWriterStub implements LogWriterInterface
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
             'occurredAt' => (new DateTime())->format('Y-m-d H:i:s'),
+            'providerId' => 'providerId',
             'requestData' => '{"send": "me"}',
             'requestId' => 'request-id',
             'responseData' => '{"status": "ok"}'

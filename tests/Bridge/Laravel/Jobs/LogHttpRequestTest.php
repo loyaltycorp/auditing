@@ -28,6 +28,7 @@ class LogHttpRequestTest extends TestCase
             '127.0.0.1',
             0,
             new DateTime(),
+            'provider-id',
             '{}',
             '{}'
         );
