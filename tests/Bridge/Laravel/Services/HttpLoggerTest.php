@@ -5,6 +5,7 @@ namespace Tests\LoyaltyCorp\Auditing\Bridge\Laravel\Services;
 
 use EoneoPay\Utils\DateTime;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\HttpLogger;
+use LoyaltyCorp\Multitenancy\Database\Entities\Provider;
 use Tests\LoyaltyCorp\Auditing\Stubs\Bridge\Laravel\DispatcherStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Services\LogLineFactory\RequestStub;
 use Tests\LoyaltyCorp\Auditing\Stubs\Services\LogLineFactory\ResponseStub;
@@ -25,9 +26,11 @@ class HttpLoggerTest extends TestCase
      */
     public function testRecordingDoesNotThrowException(): void
     {
+        $provider = new Provider('1', 'test-provider');
         $dispatcher = new DispatcherStub();
 
         $this->getInstance($dispatcher)->record(
+            $provider,
             '127.0.0.1',
             new DateTime(),
             new RequestStub(),

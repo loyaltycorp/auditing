@@ -8,6 +8,7 @@ use Illuminate\Contracts\Bus\Dispatcher as IlluminateJobDispatcher;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Jobs\LogHttpRequest;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
+use LoyaltyCorp\Multitenancy\Database\Entities\Provider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -39,13 +40,14 @@ class HttpLogger implements HttpLoggerInterface
      * {@inheritdoc}
      */
     public function record(
+        ?Provider $provider,
         string $ipAddress,
         DateTime $now,
         RequestInterface $request,
         ?ResponseInterface $response
     ): void {
         // Build the DTO
-        $logLine = $this->logLineFactory->create($ipAddress, $now, $request, $response);
+        $logLine = $this->logLineFactory->create($provider, $ipAddress, $now, $request, $response);
 
         // Dispatch the HTTP log job
         $this->dispatcher->dispatch(
