@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7;
 use LoyaltyCorp\Auditing\DataTransferObjects\LogLine;
 use LoyaltyCorp\Auditing\Interfaces\DataTransferObjects\LogLineInterface;
 use LoyaltyCorp\Auditing\Interfaces\Services\LogLineFactoryInterface;
+use LoyaltyCorp\Multitenancy\Database\Entities\Provider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -22,18 +23,20 @@ final class LogLineFactory implements LogLineFactoryInterface
      * {@inheritdoc}
      */
     public function create(
+        ?Provider $provider,
         string $ipAddress,
         DateTime $now,
         RequestInterface $request,
         ?ResponseInterface $response
     ): LogLine {
         $requestString = Psr7\str($request);
-        $responseString =  $response instanceof ResponseInterface ? Psr7\str($response) : null;
+        $responseString = $response instanceof ResponseInterface ? Psr7\str($response) : null;
 
         return new LogLine(
             $ipAddress,
             LogLineInterface::LINE_STATUS_NOT_INDEXED,
             $now,
+            $provider === null ? null : $provider->getExternalId(),
             $this->getContentTruncated($requestString),
             $this->getContentTruncated($responseString)
         );
