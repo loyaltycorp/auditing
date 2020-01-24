@@ -52,6 +52,7 @@ class LogWriterTest extends TestCase
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
             'occurredAt' => (new DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'providerId' => 'provider-id',
             'requestData' => '{"send": "me"}',
             'responseData' => '{"status": "ok"}'
         ];
@@ -61,6 +62,7 @@ class LogWriterTest extends TestCase
             '127.0.01',
             1,
             new DateTime(),
+            'provider-id',
             '{"send": "me"}',
             '{"status": "ok"}'
         ));
@@ -81,6 +83,7 @@ class LogWriterTest extends TestCase
             'clientIp' => '127.0.01',
             'lineStatus' => 1,
             'occurredAt' => (new DateTime())->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'providerId' => 'provider-id',
             'requestData' => '{"send": "me"}',
             'responseData' => '{"status": "ok"}'
         ];
@@ -90,6 +93,7 @@ class LogWriterTest extends TestCase
             '127.0.01',
             1,
             new DateTime(),
+            'provider-id',
             '{"send": "me"}',
             '{"status": "ok"}'
         ));

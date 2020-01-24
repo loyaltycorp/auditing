@@ -59,6 +59,7 @@ final class SearchLogWriterJob extends Job
             $this->logLine->getClientIp(),
             LogLine::LINE_STATUS_INDEXED,
             $this->logLine->getOccurredAt(),
+            $this->logLine->getProviderId(),
             $this->logLine->getRequestData(),
             $this->logLine->getResponseData()
         ));

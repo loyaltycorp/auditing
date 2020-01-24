@@ -34,6 +34,13 @@ class LogLine extends DataTransferObject implements LogLineInterface
     private $occurredAt;
 
     /**
+     * Provider id.
+     *
+     * @var string|null
+     */
+    private $providerId;
+
+    /**
      * Request data
      *
      * @var string|null
@@ -53,6 +60,7 @@ class LogLine extends DataTransferObject implements LogLineInterface
      * @param string $clientIp Client ip
      * @param int $lineStatus Status
      * @param \DateTime $occurredAt Occurred timestamp
+     * @param string|null $providerId
      * @param string|null $requestData Request data
      * @param string|null $responseData Response data
      */
@@ -60,12 +68,14 @@ class LogLine extends DataTransferObject implements LogLineInterface
         string $clientIp,
         int $lineStatus,
         DateTime $occurredAt,
+        ?string $providerId,
         ?string $requestData,
         ?string $responseData
     ) {
         $this->clientIp = $clientIp;
         $this->lineStatus = $lineStatus;
         $this->occurredAt = $occurredAt;
+        $this->providerId = $providerId;
         $this->requestData = $requestData;
         $this->responseData = $responseData;
     }
@@ -98,6 +108,16 @@ class LogLine extends DataTransferObject implements LogLineInterface
     public function getOccurredAt(): DateTime
     {
         return $this->occurredAt;
+    }
+
+    /**
+     * Get provider.
+     *
+     * @return string|null
+     */
+    public function getProviderId(): ?string
+    {
+        return $this->providerId;
     }
 
     /**
@@ -137,6 +157,7 @@ class LogLine extends DataTransferObject implements LogLineInterface
             'clientIp' => $this->clientIp,
             'lineStatus' => $this->lineStatus,
             'occurredAt' => $this->occurredAt->format(UtcDateTimeInterface::FORMAT_ZULU),
+            'providerId' => $this->getProviderId(),
             'requestData' => $this->requestData,
             'responseData' => $this->responseData
         ];

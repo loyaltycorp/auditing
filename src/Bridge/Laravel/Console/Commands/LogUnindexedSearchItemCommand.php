@@ -42,6 +42,7 @@ final class LogUnindexedSearchItemCommand extends Command
                 $line['clientIp'],
                 $line['lineStatus'],
                 new DateTime($line['occurredAt']),
+                $line['providerId'],
                 $line['requestData'],
                 $line['responseData']
             )));

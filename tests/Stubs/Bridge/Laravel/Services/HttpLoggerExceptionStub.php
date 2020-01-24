@@ -6,6 +6,7 @@ namespace Tests\LoyaltyCorp\Auditing\Stubs\Bridge\Laravel\Services;
 use DateTime;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
 use LoyaltyCorp\Auditing\Exceptions\InvalidDocumentClassException;
+use LoyaltyCorp\Multitenancy\Database\Entities\Provider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -20,6 +21,7 @@ class HttpLoggerExceptionStub implements HttpLoggerInterface
      * @throws \Exception
      */
     public function record(
+        ?Provider $provider,
         string $ipAddress,
         DateTime $now,
         RequestInterface $request,

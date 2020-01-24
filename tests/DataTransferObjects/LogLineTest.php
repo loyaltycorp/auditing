@@ -27,6 +27,7 @@ class LogLineTest extends TestCase
             '127.0.0.1',
             0,
             new DateTime('2019-05-01T12:12:12'),
+            'provider-eonx',
             '{"data":"some good content"}',
             '{"data":"even better content"}'
         );
@@ -80,6 +81,7 @@ class LogLineTest extends TestCase
                 'clientIp' => '127.0.0.1',
                 'lineStatus' => 1,
                 'occurredAt' => '2019-05-20T11:12:13Z',
+                'providerId' => 'provider-eonx',
                 'requestData' => 'HTTP request heads and bodies',
                 'responseData' => 'HTTP response heads and bodies'
             ],
@@ -100,6 +102,7 @@ class LogLineTest extends TestCase
             '127.0.0.1',
             1,
             new DateTime('2019-05-20T11:12:13Z'),
+            'provider-eonx',
             'HTTP request heads and bodies',
             'HTTP response heads and bodies',
         );

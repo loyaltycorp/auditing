@@ -9,6 +9,7 @@ use EoneoPay\Utils\DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use LoyaltyCorp\Auditing\Bridge\Laravel\Services\Interfaces\HttpLoggerInterface;
+use LoyaltyCorp\Multitenancy\Database\Entities\Provider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
@@ -84,6 +85,7 @@ class AuditMiddleware
     /**
      * Call the HttpLoggerInterface to log psr request and response
      *
+     * @param \LoyaltyCorp\Multitenancy\Database\Entities\Provider|null $provider
      * @param \EoneoPay\Utils\DateTime $datetime
      * @param string $ipAddress
      * @param \Psr\Http\Message\RequestInterface|null $psrRequest
@@ -92,6 +94,7 @@ class AuditMiddleware
      * @return void
      */
     private function callHttpLogger(
+        ?Provider $provider,
         DateTime $datetime,
         string $ipAddress,
         ?RequestInterface $psrRequest,
@@ -100,6 +103,7 @@ class AuditMiddleware
         try {
             if (($psrRequest instanceof RequestInterface) === true) {
                 $this->httpLogger->record(
+                    $provider,
                     $ipAddress,
                     $datetime,
                     $psrRequest,
@@ -176,8 +180,10 @@ class AuditMiddleware
 
         /** @var string $ipAddress Only one string is ever returned, see testProxyIpPassedToHttpLogger */
         $ipAddress = $request->header('X-Forwarded-For') ?? $request->ip() ?? '';
+        $provider = $request->attributes->get('provider', null);
 
         $this->callHttpLogger(
+            $provider,
             $dateTime,
             $ipAddress,
             $psrRequest,

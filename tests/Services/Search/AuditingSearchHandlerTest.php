@@ -39,6 +39,7 @@ class AuditingSearchHandlerTest extends TestCase
                     'clientIp' => ['type' => 'keyword'],
                     'lineStatus' => ['type' => 'integer'],
                     'occurredAt' => ['type' => 'date'],
+                    'providerId' => ['type' => 'keyword'],
                     'requestData' => ['type' => 'text'],
                     'responseData' => ['type' => 'text'],
                     'requestId' => ['type' => 'keyword']
