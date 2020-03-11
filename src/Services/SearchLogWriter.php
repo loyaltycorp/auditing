@@ -34,8 +34,13 @@ final class SearchLogWriter implements SearchLogWriterInterface
         $documents = [];
 
         foreach ($logLines as $logLine) {
+            $index = 'http-requests';
+            if (empty($logLine['providerId']) === false) {
+                $index = \sprintf('http-requests_%s', $logLine['providerId']);
+                unset($logLine['providerId']);
+            }
             $documents[] = new DocumentUpdate(
-                'http-requests',
+                $index,
                 $logLine['requestId'],
                 $logLine
             );
