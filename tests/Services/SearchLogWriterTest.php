@@ -54,4 +54,45 @@ class SearchLogWriterTest extends TestCase
 
         self::assertEquals([$expected], $searchClient->getUpdates());
     }
+
+    /**
+     * Test bulk write to search log successfully for Provider Aware logs.
+     *
+     * @return void
+     */
+    public function testBulkWriteProviderAware(): void
+    {
+        $searchClient = new SearchClientStub();
+        $searchLogWriter = new SearchLogWriter($searchClient);
+        $occurredAt = '2018-03-22 13:45:56';
+
+        $line = [
+            'clientIp' => '127.0.01',
+            'lineStatus' => 1,
+            'occurredAt' => $occurredAt,
+            'providerId' => 'PROV--ABC123',
+            'requestData' => '{"help": "me"}',
+            'requestId' => 'ReqId-Test-1111',
+            'responseData' => '{"abc": [1,2,3,4,5,7]}'
+        ];
+
+        $expected = [
+            new DocumentUpdate(
+                'http-requests_prov--abc123',
+                'ReqId-Test-1111',
+                [
+                    'clientIp' => '127.0.01',
+                    'lineStatus' => 1,
+                    'occurredAt' => $occurredAt,
+                    'requestData' => '{"help": "me"}',
+                    'requestId' => 'ReqId-Test-1111',
+                    'responseData' => '{"abc": [1,2,3,4,5,7]}'
+                ]
+            )
+        ];
+
+        $searchLogWriter->bulkWrite([$line]);
+
+        self::assertEquals([$expected], $searchClient->getUpdates());
+    }
 }
