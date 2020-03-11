@@ -35,7 +35,10 @@ final class SearchLogWriter implements SearchLogWriterInterface
 
         foreach ($logLines as $logLine) {
             $index = 'http-requests';
-            if (empty($logLine['providerId']) === false) {
+            if (\array_key_exists('providerId', $logLine) === true &&
+                \is_string($logLine['providerId']) === true &&
+                \strlen($logLine['providerId']) !== 0
+            ) {
                 $index = \sprintf('http-requests_%s', \strtolower($logLine['providerId']));
                 unset($logLine['providerId']);
             }
