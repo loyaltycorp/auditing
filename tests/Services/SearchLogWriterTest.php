@@ -59,8 +59,6 @@ class SearchLogWriterTest extends TestCase
      * Test bulk write to search log successfully for Provider Aware logs.
      *
      * @return void
-     *
-     * @throws \EoneoPay\Utils\Exceptions\InvalidDateTimeStringException
      */
     public function testBulkWriteProviderAware(): void
     {
@@ -80,7 +78,7 @@ class SearchLogWriterTest extends TestCase
 
         $expected = [
             new DocumentUpdate(
-                'http-requests_PROV--ABC123',
+                'http-requests_prov--abc123',
                 'ReqId-Test-1111',
                 [
                     'clientIp' => '127.0.01',
