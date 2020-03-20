@@ -5,7 +5,7 @@
   "license": "BSD-3-Clause",
   "minimum-stability": "stable",
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.3",
     "ext-json": "*",
     "aws/aws-sdk-php": "^3.93",
     "eonx-com/multitenancy": "^1.0",
