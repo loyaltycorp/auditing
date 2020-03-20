@@ -8,6 +8,7 @@
     "php": "^7.3",
     "ext-json": "*",
     "aws/aws-sdk-php": "^3.93",
+    "eonx-com/easy-test": "^2.3",
     "eonx-com/multitenancy": "^1.0",
     "guzzlehttp/guzzle": "^6.3",
     "ramsey/uuid": "^3.8",
