@@ -65,7 +65,7 @@
     "phpstan": "phpstan analyze src tests -c phpstan.neon --ansi --level max --memory-limit=2048M",
     "phpunit": "phpunit --configuration phpunit.xml",
     "coverage": [
-      "@composer phpunit -- --coverage-text=coverage_output.txt --coverage-html=coverage-html -> @phpunit --coverage-text=coverage_output.txt --coverage-html=coverage-html",
+      "@phpunit --coverage-text=coverage_output.txt --coverage-html=coverage-html",
       "tar zcf coverage-html.tgz --directory=coverage-html .",
       "easy-test check-coverage -c 100 coverage_output.txt"
     ],
