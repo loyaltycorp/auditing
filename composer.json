@@ -8,7 +8,6 @@
     "php": "^7.3",
     "ext-json": "*",
     "aws/aws-sdk-php": "^3.93",
-    "eonx-com/easy-test": "^2.3",
     "eonx-com/multitenancy": "^1.0",
     "guzzlehttp/guzzle": "^6.3",
     "ramsey/uuid": "^3.8",
@@ -16,6 +15,7 @@
     "zendframework/zend-diactoros": "^2.1"
   },
   "require-dev": {
+    "eonx-com/easy-test": "^2.3",
     "eonx-com/externals": "^v1.0|^2.0",
     "eonx-com/search": "^2.1",
     "eonx-com/standards": "^0.2",
