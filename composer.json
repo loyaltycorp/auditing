@@ -63,7 +63,7 @@
     "copy-paste-detector": "phpcpd --ansi --min-lines=5 --min-tokens=70 src tests",
     "mess-detector": "phpmd src,tests text phpmd.xml",
     "phpstan": "phpstan analyze src tests -c phpstan.neon --ansi --level max --memory-limit=2048M",
-    "phpunit": "phpunit --configuration phpunit.xml",
+    "phpunit": "vendor/bin/phpunit --configuration phpunit.xml",
     "coverage": [
       "@phpunit --coverage-text=coverage_output.txt --coverage-html=coverage-html",
       "tar zcf coverage-html.tgz --directory=coverage-html .",
